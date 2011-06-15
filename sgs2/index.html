@@ -72,6 +72,29 @@ CONFIG_ISDBT_FC8100：<br>
 CONFIG_MMC_CPRM：<br>
 ？？？<BR>
 <BR>
+
+<HR>
+[ファイルシステムのマウント状況]<BR>
+次のようになっているみたい。もっとあるかも。<BR>
+<code><pre>
+/dev/block/
+mmcblk0p1   /efs /dev/mapper/efs  efs  ext4  NOT_PROTECTED 
+mmcblk0p2   ???
+mmcblk0p3   ??? (コメントアウトされているので現在使われていない？？)
+mmcblk0p4   ???
+mmcblk0p5   ???
+mmcblk0p6   ???
+mmcblk0p7   /cache  /dev/mapper/cache cache ext4 NOT_PROTECTED
+mmcblk0p8   ???
+mmcblk0p9   /system  ext4
+mmcblk0p10  /data /dev/mapper/data data ext4 PROTECTED_WITH_PASSWORD
+mmcblk0p11  /sdcard /dev/block/mmcblk0p11 /dev/mapper/sdcard sdcard vfat PROTECTED_WITH_PASSWORD
+mmcblk0p12  /preload ext4
+
+mmcblk1     /ext_sdcard  /dev/mapper/extsdcard sdcard1 vfat PROTECTED_WITH_PASSWORD
+</code></pre>
+mmcblk1はスロットのSDカードかな？<BR>
+
 </p>
 
 </body>
