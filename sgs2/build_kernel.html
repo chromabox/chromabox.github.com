@@ -16,8 +16,15 @@
       はなくろ様の<a href="http://blog.8796.jp/8796kanri/2011/05/%e9%9b%bb%e8%a9%b1-galaxy-sii-gt-i9100%e3%81%ae%e3%82%ab%e3%83%bc%e3%83%8d%e3%83%ab%e3%82%92%e6%89%8b%e6%97%a9%e3%81%8f%e3%83%93%e3%83%ab%e3%83%89%e3%81%99%e3%82%8b.html">ペー
         ジ</a>を参考にしました。 今回はとりあえずビルドだけ。<br>
       まだ実機も無いし今後変わる可能性が高い。<br>
-      <br>
-      <br>
+    </p>
+    <p><br>
+    </p>
+    <hr checked="true">
+    <h4>前提．</h4>
+    <p>make とかLinuxホスト側のgccとかその辺は予め入れておくこと。<br>
+      カーネルのコンパイルはAndroidのビルドみたいに廃スペックは要求されないので、VirtualBoxなどの仮想環境にUbuntuな
+      どに構築してビルドで余裕。<br>
+      日本版はLZOで圧縮するみたいなのでlzopとか入れておくのを忘れずに。<br>
     </p>
     <hr checked="true">
     <h4>１．カーネルをさむそんから落とす</h4>
@@ -26,10 +33,8 @@
     <br>
     GT-I9100で検索。なんか５月に更新されたらしい。 <br>
     <br>
-    <br>
     <hr checked="true">
     <h4>２．落としたカーネルソースともども展開する </h4>
-    <br>
     <hr checked="true">
     <h4>３．コンパイラをどこかに展開。</h4>
     コンパイラはSourcery G++ Lite 2009q3-68 for ARM EABIを使う <br>
@@ -38,7 +43,6 @@
     <br>
     <hr checked="true">
     <h4>４．moduleをインストールする受け皿ディレクトリを作る </h4>
-    <br>
     <hr checked="true">
     <h4>５．パス通すためのなんか適当なシェルスクリプトをこんな感じで作る </h4>
     <br>
@@ -93,13 +97,14 @@
     <a checked="true" href="https://github.com/GalaxySII/initramfs-galaxysii">https://github.com/GalaxySII/initramfs-galaxysii</a>&nbsp;
 
 
+
     ：特になにもいじっていないinitramfs。<br>
     <a href="https://github.com/project-voodoo/galaxysii-initramfs-modified">https://github.com/project-voodoo/galaxysii-initramfs-modified</a>&nbsp;
 
 
+
     ：suとsuperuser.apkが初期にコピーされるようになってる<br>
     &nbsp; <br>
-    <br>
     <hr checked="true">
     <h4>８．initramfsにさっき作ったドライバをコピーする </h4>
     <code>$ cd fstemp<br>
@@ -122,13 +127,12 @@
     <code>$ cd kermel <br>
       $ make zImage CONFIG_INITRAMFS_SOURCE="../initramfs_mod.cpio" </code><br>
     <br>
-    <br>
     <hr checked="true">
     <h4>１１．arch/arm/bootにzImageがあるのでTARして終わり</h4>
     <code>$ tar cvf GT-I9100_kernel_Gingerbread_homebrew.tar zImage </code><br>
     <br>
-    <br>
-    <hr checked="true">↑の一連操作が面倒な人はこのスクリプト(<a href="build_kernel.sh">build_kernel.sh</a>)
+    <hr checked="true"><br>
+    ↑の一連操作が面倒な人はこのスクリプト(<a href="build_kernel.sh">build_kernel.sh</a>)
     をつかうとよいかも。<br>
     <br>
     使いかたは次の通り。<br>
