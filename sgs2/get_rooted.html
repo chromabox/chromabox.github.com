@@ -32,8 +32,9 @@
     </div>
     <div><br>
       <hr checked="true">２．Insecureなカーネル(initram付きなカーネル)を作るか何処からか入手</div>
-    <div>&nbsp;&nbsp; &nbsp;（国際版ではXWKDD_insecure.tar
-      日本版では多分コンパイルしなおさないとダメかも）</div>
+    <div>&nbsp;&nbsp; &nbsp;（<span style="font-weight: bold;">注：国際版では
+        XWKDD_insecure.tarでOKですが、日本版では微妙にローカライズされているはずなので、多分カーネルをコンパイルしな
+        おして.koを合わせないとまずいかも？？</span>）</div>
     <div><br>
     </div>
     <div><br>
@@ -72,7 +73,7 @@
     </div>
     <div><br>
       <hr checked="true">一応上記の方法で行けると思いますが、、<br>
-      もーなんかよーわからん。。。というひとはこの動画を見てください。<br>
+      えっ何言ってるかわからないとかいうひとは素直に諦めるか、この動画を見て流れをつかんでください。<br>
       <br>
       <iframe src="http://www.youtube.com/embed/1_lsLyywJdY" allowfullscreen=""
         frameborder="0" height="349" width="560"></iframe> <br>
@@ -100,9 +101,11 @@
         bs=4096<br>
         <span style="border-collapse: separate; color: rgb(0, 0, 0); font-family: monospace; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">#dd
 
+
           if=/dev/block/mmcblk0p9 of=/sdcard/backup/mmcblk0p9.img
           bs=4096<br>
         </span><span style="border-collapse: separate; color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">#dd
+
           if=/dev/block/mmcblk0p10 of=/sdcard/backup/mmcblk0p10.img
           bs=4096</span><span style="border-collapse: separate; color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><br>
         </span>#dd if=/dev/block/mmcblk0p12
