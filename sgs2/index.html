@@ -1,101 +1,96 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<meta http-equiv="content-language" content="ja" />
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
-<head>
-	<link rel="start index" href="./" />
-	<title>GalaxyS 2 (GT-I9100) 色々メモ</title>
-</head>
-<body>
-
-<h2>GalaxyS 2 (GT-I9100) 色々メモ</h2>
-<p>
-ここには GalaxyS 2 (GT-I9100)についての色々なメモが書かれています。<BR>
-文鎮erしか得しません。<BR>
-<BR>
-！！！内容に関しては保証しませんので、そのあたり注意してください。！！！<br>
-<BR>
-</p>
-
-<p>
-[カーネル周り]<br>
-・<a href="build_kernel.html">公式カーネルのビルドなど</a><br>
-</p>
-
-
-<p>
-以下メモ書き。。。<br>
-<br>
-<br>
-<HR>
-[公式カーネルの場所]<br>
-https://opensource.samsung.com/<br>
-<br>
-<HR>
-[公式カーネルのコンフィグの違い]
-<code><pre>
-$ diff -rupN c1_rev02_defconfig c1_rev02_jpn_ntt_defconfig 
-
-# CONFIG_KERNEL_GZIP is not set
-CONFIG_KERNEL_LZO=y
-# CONFIG_RD_GZIP is not set
-CONFIG_RD_LZO=y
-# CONFIG_TARGET_LOCALE_EUR is not set
-CONFIG_TARGET_LOCALE_NTT=y
-# CONFIG_IPV6_MULTIPLE_TABLES is not set
-# CONFIG_IPV6_SUBTREES is not set    （行消えてる）
-# CONFIG_PN544 is not set
-CONFIG_VIDEO_TSI=y
-CONFIG_ISDBT_FC8100=y
-CONFIG_MMC_CPRM=y
-# CONFIG_FM_SI4709 is not set
-</code></pre>
-
-・通常のコンフィグとの相違点<BR>
-<BR>
-CONFIG_KERNEL_LZO：<br>
-カーネルをLZOフォーマットでの圧縮にする、展開と圧縮が若干早いらしい。２．６．３３あたりから入ってる<BR>
-<br>
-CONFIG_RD_LZO：<br>
-initial ramdisk またはcpio bufferのLZO圧縮のサポートを有効にする。<BR>
-<br>
-CONFIG_TARGET_LOCALE_NTT：<br>
-多分SC-02C用ローカルコンフィグ。これから調べ予定<BR>
-<br>
-CONFIG_VIDEO_TSI：<br>
-？？？ワンセグかな<BR>
-<br>
-CONFIG_ISDBT_FC8100：<br>
-謎。SGS2のカーネルにだけ存在しているみたい。<BR>
-<br>
-CONFIG_MMC_CPRM：<br>
-？？？<BR>
-<BR>
-
-<HR>
-[ファイルシステムのマウント状況]<BR>
-次のようになっているみたい。もっとあるかも。<BR>
-<code><pre>
-/dev/block/
-mmcblk0p1   /efs /dev/mapper/efs  efs  ext4  NOT_PROTECTED 
-mmcblk0p2   ???
-mmcblk0p3   ??? (コメントアウトされているので現在使われていない？？)
-mmcblk0p4   ???
-mmcblk0p5   ???
-mmcblk0p6   ???
-mmcblk0p7   /cache  /dev/mapper/cache cache ext4 NOT_PROTECTED
-mmcblk0p8   ???
-mmcblk0p9   /system  ext4
-mmcblk0p10  /data /dev/mapper/data data ext4 PROTECTED_WITH_PASSWORD
-mmcblk0p11  /sdcard /dev/block/mmcblk0p11 /dev/mapper/sdcard sdcard vfat PROTECTED_WITH_PASSWORD
-mmcblk0p12  /preload ext4
-
-mmcblk1     /ext_sdcard  /dev/mapper/extsdcard sdcard1 vfat PROTECTED_WITH_PASSWORD
-</code></pre>
-mmcblk1はスロットのSDカードかな？<BR>
-
-</p>
-
-</body>
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="start index" href="./">
+    <title>GalaxyS 2 (GT-I9100) 色々メモ</title>
+  </head>
+  <body>
+    <h2>GalaxyS 2 (GT-I9100) 色々メモ</h2>
+    <p> ここには GalaxyS 2 (GT-I9100)についての色々なメモが書かれています。<br>
+      文鎮erしか得しません。<br>
+      <br>
+      ！！！内容に関しては保証しませんので、そのあたり注意してください。！！！<br>
+    </p>
+    <p><br>
+    </p>
+    <p>[rootedについて]</p>
+    <p>・<a href="get_rooted.html">rootの取り方</a> </p>
+    <p><br>
+    </p>
+    <p> </p>
+    <p> [カーネル周り]<br>
+      ・<a checked="true" href="build_kernel.html">公式カーネルのビルドなど</a></p>
+    <br>
+    <p><br>
+    </p>
+    <p>以下メモ書き。。。<br>
+    </p>
+    <hr checked="true" style="margin-top: 17px;"> [公式カーネルの場所]<br>
+    https://opensource.samsung.com/<br>
+    <br>
+    <hr> [公式カーネルのコンフィグの違い] <br>
+    <code>$ diff -rupN c1_rev02_defconfig c1_rev02_jpn_ntt_defconfig<br>
+      <br>
+      # CONFIG_KERNEL_GZIP is not set <br>
+      CONFIG_KERNEL_LZO=y <br>
+      # CONFIG_RD_GZIP is not set <br>
+      CONFIG_RD_LZO=y <br>
+      # CONFIG_TARGET_LOCALE_EUR is not set <br>
+      CONFIG_TARGET_LOCALE_NTT=y <br>
+      # CONFIG_IPV6_MULTIPLE_TABLES is not set <br>
+      # CONFIG_IPV6_SUBTREES is not set （行消えてる） <br>
+      # CONFIG_PN544 is not set <br>
+      CONFIG_VIDEO_TSI=y <br>
+      CONFIG_ISDBT_FC8100=y <br>
+      CONFIG_MMC_CPRM=y <br>
+      # CONFIG_FM_SI4709 is not set<br>
+      &nbsp;<br>
+    </code>・通常のコンフィグとの相違点<br>
+    <br>
+    CONFIG_KERNEL_LZO：<br>
+    カーネルをLZOフォーマットでの圧縮にする、展開と圧縮が若干早いらしい。２．６．３３あたりから入ってる<br>
+    <br>
+    CONFIG_RD_LZO：<br>
+    initial ramdisk またはcpio bufferのLZO圧縮のサポートを有効にする。<br>
+    <br>
+    CONFIG_TARGET_LOCALE_NTT：<br>
+    多分SC-02C用ローカルコンフィグ。これから調べ予定<br>
+    <br>
+    CONFIG_VIDEO_TSI：<br>
+    ？？？ワンセグかな<br>
+    <br>
+    CONFIG_ISDBT_FC8100：<br>
+    謎。SGS2のカーネルにだけ存在しているみたい。<br>
+    <br>
+    CONFIG_MMC_CPRM：<br>
+    ？？？<br>
+    <br>
+    <hr> [ファイルシステムのマウント状況]<br>
+    次のようになっているみたい。もっとあるかも。<br>
+    <code></code><br>
+    <code>/dev/block/ <br>
+      mmcblk0p1 /efs /dev/mapper/efs efs ext4 NOT_PROTECTED <br>
+      mmcblk0p2 ??? <br>
+      mmcblk0p3 ??? (コメントアウトされているので現在使われていない？？) <br>
+      mmcblk0p4 ??? <br>
+      mmcblk0p5 ??? <br>
+      mmcblk0p6 ???<br>
+      mmcblk0p7 /cache /dev/mapper/cache cache ext4 NOT_PROTECTED <br>
+      mmcblk0p8 ??? <br>
+      mmcblk0p9 /system ext4 mmcblk0p10 /data /dev/mapper/data data ext4
+      PROTECTED_WITH_PASSWORD <br>
+      mmcblk0p11 /sdcard /dev/block/mmcblk0p11 /dev/mapper/sdcard sdcard
+      vfat PROTECTED_WITH_PASSWORD <br>
+      mmcblk0p12 /preload ext4 <br>
+      <br>
+      mmcblk1 /ext_sdcard /dev/mapper/extsdcard sdcard1 vfat
+      PROTECTED_WITH_PASSWORD </code><br>
+    <br>
+    mmcblk1はスロットのSDカードかな？<br>
+    <br>
+    <br>
+  </body>
 </html>
