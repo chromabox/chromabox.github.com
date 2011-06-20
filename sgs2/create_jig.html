@@ -1,0 +1,127 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="start index" href="./">
+    <title>JIGを作ってみた</title>
+  </head>
+  <body>
+    <h2>JIGを作ってみた（Jigの作り方）<br>
+    </h2>
+    <p> この内容については無保証です。<br>
+      下手したら文鎮になるかもしれないので真似するときは要注意。</p>
+    <p>一応Jig自体は海外通販で売っているみたいなので自信ない人はそっち買ったほうがよいかも。<br>
+      （1000円くらいなので）<br>
+    </p>
+    <p>とりあえず、わかる人だけ参考にしてください。<br>
+      <br>
+    </p>
+    <hr checked="true"><span style="border-collapse: separate; color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+        style="border-collapse: separate; color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">Jig、、、、<br>
+        これをGalaxyS（S２も）のUSB Microに挿すと強制的にダウンロードモードにしてしまうというなんとも怪しい代物です。<br>
+        GalaxySは元々Home＋Power＋Volの通称「３ボタン起動」でダウンロードモードに移行できます
+        が、それすらダメな場合の緊急処置として使うことが出来ます。<br>
+        CFWのインストール失敗、カーネルの書き込みミス、フラッシュROMの書き込みミス等などなど、、、、電源入れて３ボタンでもダウン
+        ロードモードにならないような文鎮目前のモノに対して効果を発揮する場合があります。<br>
+        <br>
+      </span></span><span style="border-collapse: separate; color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"></span>
+    <div>
+      <hr checked="true"><span style="font-weight: bold;">[用意するもの]</span><br>
+      <br>
+      ・はんだこて、はんだ<br>
+      ・テスター<br>
+      ・USB MicroBコネクタ（オス） １つ<br>
+      ・３００kΩ抵抗 １つ<br>
+      ・1kΩ抵抗 １つ<br>
+      ・配線(必要に応じて)<br>
+      ・スルーホース基板(必要に応じて)<br>
+      ・ケース(必要に応じて)<br>
+      <br>
+      テスター持たないものは工作するべからずです。テスターは必ず用意しましょう。<br>
+      （ショートは最悪の場合煙が出て文鎮化になりますので。。。）<br>
+      <br>
+      抵抗に関しては、某スイッチングICの仕様を見る限りでは292k-316kΩまでの範囲ならOKみたい（多分抵抗の誤差を鑑みていると思
+      う）なので、300kΩ金皮1つでも通るかもしれません。<br>
+      逆に100kΩ３つで構成するのは手間ですし、カーボンにすると誤差が心配なのでちょっとお勧めできません。<br>
+      <br>
+      USB MicroBのコネクタは、なかなか見つからないかもしれません。<br>
+      秋葉原でもコネクタそのものは売ってなくてジャンクを使うか、変換コネクタ系を分解するかくらいですね。<br>
+      （まぁ売ってたとしても表面実装のものしかなくて工作にはちょっと不向きかもしれません）<br>
+      <br>
+      充電オンリーの100円シリーズのを使う場合は特にですが、ケーブル線には必要な線（ID）が来ていない場合が殆どですので、コネクタの樹脂
+      を剥いて、信号線を丸出しにしないといけません。<br>
+      100均のじゃなくても簡略化しているのが殆ど（４と５が結線されているとか）ですのでコネクタ樹脂は剥いでみましょう。<br>
+      また、コネクタを剥き出しても本当にコネクタに信号が出ているか怪しい場合もあるので、組み立てる前にコネクタのチェックは欠かせません。<br>
+      （気になる方は USBマイクロ 自作で検索すると色々出てきます）<br>
+      <br>
+      で、こういったUSB MicroBメスの変換基板があれば確実にチェックできますので大変お勧めです。<br>
+      <br>
+      800円で三枚入ってるので個人で使う分にはちょっと無駄ですけどね。<br>
+      <br>
+      <br>
+      <br>
+      私の場合はカーボン抵抗で構成したので300k+1kです。（実測値297kΩ）<br>
+      あと、綺麗に作りたかったのでわざわざ小さいスルーホース基板も使いました。100円です。<br>
+      USB Micro Bオスはこいつ<br>
+      <br>
+      を分解しました。ケースも使えて一石二鳥です。500円くらいでした。<br>
+      なお、こいつのMicroBオスは3番だけが死んでいるという変わったものでした。<br>
+      <br>
+      <br>
+      部品の値段ですが、安く上げようと思ったら、100均充電ケーブル＋抵抗２種類(300k+1kのカーボン)で10円＝110円で出来てしま
+      うと思います。<br>
+      PETボトルの水一つ分です。<br>
+      ただまぁこれはケースが無いので耐久性に問題ありですけどね。<br>
+    </div>
+    <div><br>
+      <br>
+      <hr checked="true"><span style="font-weight: bold;">[回路図]</span><br>
+      色んなところに上がってますが、本当にたったこれだけです。<br>
+      <br>
+      <span style="font-family: monospace;">USB Micro </span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">1 --</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">2 --</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">3 --</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">4 ---[301k]-+</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">5-----------+</span><br>
+      <br>
+      ようするに４(ID)と５(GND)を301kΩで繋げるだけの簡単な工作ですね。<br>
+      <br>
+      <br>
+      <hr checked="true"><span style="font-weight: bold;">[こんな感じでつくりました]</span><br>
+      <br>
+      私はこんな感じで作ってみました。<br>
+      <br>
+      500円で買った怪しいBOX２を開けるとこんな風になってました<br>
+      <br>
+      <br>
+      実はこれ、用途不明とかかかれてました。元々はNokiaの携帯で使う奴みたいです。<br>
+      <br>
+      で、ここからMicroBオスだけを回収して、スルーホース基板に抵抗を半田付けして最終的にコネクタと基板を結線して<br>
+      <br>
+      な感じとなりました。<br>
+      <br>
+      一応最後に全ての端子でショートしていないか、４と５番は範囲内に収まってるかどうかをテスターでテストしてみましょう。<br>
+      <br>
+      OKでした。<br>
+      <br>
+      で、ケースに仕舞って完成です。<br>
+      やっぱりケースがあったほうがソレらしくてよいですね。<br>
+      <br>
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[余談]</span><br>
+      <br>
+      SGS2は、おでんなどでフラッシュを書いてしまうと思いっきりカウントされて改造品だと一目で判るような仕組みになっていますが、Jigを
+      使うと書き込み回数のカウントがリセットされて0になるそうです。<br>
+      <br>
+      元々がFactoryMode
+      Bootなので、おそらく修理の人は似たようなJigを使って完全にリセットをかけてから専用ツールで書くのだと思います。<br>
+      ３ボタンリセットとは違うコードが走るようになっているのでしょうね。<br>
+      <br>
+      <br>
+    </div>
+  </body>
+</html>
