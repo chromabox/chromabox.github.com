@@ -56,16 +56,22 @@
       また、コネクタを剥き出しても本当にコネクタに信号が出ているか怪しい場合もあるので、組み立てる前にコネクタのチェックは欠かせません。<br>
       （気になる方は USBマイクロ 自作で検索すると色々出てきます）<br>
       <br>
+      一応これは105円でXperia用の充電・データ転送というものがあったので買って剥いでみたのがこんな感じでした。<br>
+      <img title="jig100" alt="jig100" src="jig_100en.JPG"><br>
+      これは幸運にも1、２，３，５がつながっておりまして、4はNC（どこにもつながってない）で綺麗な状態でした。<br>
+      これは額面通りデータ転送にも使えますね。<br>
+      というか剥ぎやすかったし空間が若干あったので、これで作ったほうが安く上がったかなぁと後悔。。<br>
+      （また時間があったらチップ抵抗で作ってみようと思う）<br>
+      <br>
       で、こういったUSB MicroBメスの変換基板があれば確実にチェックできますので大変お勧めです。<br>
-      <br>
+      <img title="jigfemale" alt="jigfemale" src="jig_usbfemale.JPG"><br>
       800円で三枚入ってるので個人で使う分にはちょっと無駄ですけどね。<br>
-      <br>
       <br>
       <br>
       私の場合はカーボン抵抗で構成したので300k+1kです。（実測値297kΩ）<br>
       あと、綺麗に作りたかったのでわざわざ小さいスルーホース基板も使いました。100円です。<br>
       USB Micro Bオスはこいつ<br>
-      <br>
+      <img title="jigbox" alt="" src="jig_box.JPG"><br>
       を分解しました。ケースも使えて一石二鳥です。500円くらいでした。<br>
       なお、こいつのMicroBオスは3番だけが死んでいるという変わったものでした。<br>
       <br>
@@ -95,21 +101,21 @@
       私はこんな感じで作ってみました。<br>
       <br>
       500円で買った怪しいBOX２を開けるとこんな風になってました<br>
-      <br>
-      <br>
+      <img alt="" src="jig_bun1.JPG"><br>
       実はこれ、用途不明とかかかれてました。元々はNokiaの携帯で使う奴みたいです。<br>
       <br>
       で、ここからMicroBオスだけを回収して、スルーホース基板に抵抗を半田付けして最終的にコネクタと基板を結線して<br>
-      <br>
+      <img alt="" src="jig_bun2.JPG"><img alt="" src="jig_bun3.JPG"><br>
       な感じとなりました。<br>
-      <br>
-      一応最後に全ての端子でショートしていないか、４と５番は範囲内に収まってるかどうかをテスターでテストしてみましょう。<br>
-      <br>
-      OKでした。<br>
       <br>
       で、ケースに仕舞って完成です。<br>
       やっぱりケースがあったほうがソレらしくてよいですね。<br>
       <br>
+      一応最後に全ての端子でショートしていないか、４と５番は範囲内に収まってるかどうかをテスターでテストしてみましょう。<br>
+      <img alt="" src="jig_complete.JPG"><br>
+      OKですね。<br>
+      <br>
+      次は時間があれば100均コネクタ＋チップ抵抗でつくってみたいかと思います。<br>
     </div>
     <div><br>
       <hr checked="true"><span style="font-weight: bold;">[余談]</span><br>
@@ -121,6 +127,31 @@
       Bootなので、おそらく修理の人は似たようなJigを使って完全にリセットをかけてから専用ツールで書くのだと思います。<br>
       ３ボタンリセットとは違うコードが走るようになっているのでしょうね。<br>
       <br>
+      <br>
+      <hr checked="true"><span style="font-weight: bold;">[余談２]</span><br>
+      <br>
+      まったくJIGと関係ないですが、USBのOTGケーブルを自作する場合は、４（ID）と５（GND）を結線してUSBA側の４番（GND）
+      とUSBMicroの４（ID）を結線する必要があります。<br>
+      <br>
+      つまりMicro側の４と５、そして相手側の4を同じレベルにすればOKというわけです。<br>
+      <br>
+      回路図で書くとこんな感じです。<br>
+      <br style="font-family: monospace;">
+      <span style="font-family: monospace;">USB
+        Micro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        USB Normal</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;"> 1 ------------------- 1</span><br
+        style="font-family: monospace;">
+      <span style="font-family: monospace;"> 2 ------------------- 2</span><br
+        style="font-family: monospace;">
+      <span style="font-family: monospace;"> 3 ------------------- 3</span><br
+        style="font-family: monospace;">
+      <span style="font-family: monospace;"> 4 --+---------------- 4</span><br
+        style="font-family: monospace;">
+      <span style="font-family: monospace;"> 5 --+</span><br>
+      <br>
+      <br>
+      ４（ID）を結線していなかったりするとOTG動作にはならす失敗しますので確認しましょう。<br>
       <br>
     </div>
   </body>
