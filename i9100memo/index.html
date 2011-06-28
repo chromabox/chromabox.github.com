@@ -1,0 +1,133 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="start index" href="./">
+    <title>GalaxyS 2 (GT-I9100) 色々メモ</title>
+  </head>
+  <body>
+    <h2>GT-I9100 色々メモ</h2>
+    <p> ここにはGT-I9100についての色々なメモが書かれています。<br>
+      文鎮erしか得しません。<br>
+      <br>
+      ！！！内容に関しては保証しませんので、そのあたり注意してください。！！！<br>
+    </p>
+    <p><br>
+    </p>
+    <p>[rootedについて]<br>
+      ・<a href="get_rooted.html">rootの取り方</a> </p>
+    <p><br>
+    </p>
+    <p> </p>
+    <p> [カーネル周り]<br>
+      ・<a checked="true" href="build_kernel.html">公式カーネルのビルドなど</a></p>
+      <!-- ・<a checked="true" href="memorymap.html">メモリマップの調査</a></p> -->
+    <br>
+    <p>[謎のJigについて]<br>
+      ・<a href="create_jig.html">Jigの作成方法</a><br>
+      ・<a href="create_jig2.html">小型100円Jigの作成方法(書き直し中)</a><br>
+      <!-- ・<a href="jig_howto.html">Jigの動作原理と秘密</a><br> -->
+    </p>
+    <br>
+    <p>[ツールなどへのリンク]</p>
+    <p>・<a href="https://opensource.samsung.com">公式カーネル</a> <span style="border-collapse: separate; color: rgb(0, 0, 0); font-family: Tahoma; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"></span><br>
+      ・<a href="http://www.codesourcery.com/sgpp/lite/arm/portal/release1033">ツールチェイン</a>&nbsp; <br>
+      ・<a href="http://forum.xda-developers.com/attachment.php?attachmentid=581913&amp;d=1304094576">ODIN3-v185</a>
+      (要xdaアカウント) <br>
+      ・<a href="http://forum.xda-developers.com/attachment.php?attachmentid=581915&amp;d=1304094698">XWKDD_insecure.tar</a>
+      (要xdaアカウント) <br>
+      ・<a checked="true" href="https://github.com/GalaxySII/initramfs-galaxysii">素のinitramfs</a>&nbsp;&nbsp; <br>
+      ・<a href="https://github.com/project-voodoo/galaxysii-initramfs-modified">ちょっと変更済みのinitramfs</a>&nbsp; <br>
+      ・<a checked="true" href="http://www.glassechidna.com.au/products/heimdall/">Heimdall</a>(linuxとかコマンドラインで動くODIN3)<br>
+    </p>
+    <p> <br>
+    </p>
+    <p> </p>
+    <p>以下メモ書き。。。<br>
+    </p>
+    <hr checked="true" style="margin-top: 17px;"> [公式カーネルの場所]<br>
+    https://opensource.samsung.com/<br>
+    <br>
+    <br>
+      <br>
+      <hr>[オリジナルカーネルとXDAにあるものとの違い]<BR>
+<a
+          href="https://github.com/coolbho3k/samsung-kernel-galaxysii%E3%81%A8%E3%81%AE%E6%AF%94%E8%BC%83%E3%80%82">https://github.com/coolbho3k/samsung-kernel-galaxysii&nbsp;</a></span></div>
+    <div>との比較。</div>
+    <div><br>
+    </div>
+     Diffを取ったところ、基本的に同じものだった。<br>
+    なので、今のところはどっちを使っても良い。<br>
+    <div>ソースファイルの追加のみで変更はなし。<br>
+XDAのほうが何個かファイルが追加されている程度<br>
+</div>
+・追加点<br>
+    <div>MFC(MultiFormatCODEC)用のドライバのコードが追加されている(S3C6400用)</div>
+    <div>tv20とtv30が追加</div>
+    <div>sound系の個別コードが追加</div>
+    <br>
+    <br>
+    <hr> [公式カーネルのコンフィグの違い] <br>
+    <code>$ diff -rupN c1_rev02_defconfig c1_rev02_jpn_ntt_defconfig<br>
+      <br>
+      # CONFIG_KERNEL_GZIP is not set <br>
+      CONFIG_KERNEL_LZO=y <br>
+      # CONFIG_RD_GZIP is not set <br>
+      CONFIG_RD_LZO=y <br>
+      # CONFIG_TARGET_LOCALE_EUR is not set <br>
+      CONFIG_TARGET_LOCALE_NTT=y <br>
+      # CONFIG_IPV6_MULTIPLE_TABLES is not set <br>
+      # CONFIG_IPV6_SUBTREES is not set （行消えてる） <br>
+      # CONFIG_PN544 is not set <br>
+      CONFIG_VIDEO_TSI=y <br>
+      CONFIG_ISDBT_FC8100=y <br>
+      CONFIG_MMC_CPRM=y <br>
+      # CONFIG_FM_SI4709 is not set<br>
+      &nbsp;<br>
+    </code>・通常のコンフィグとの相違点<br>
+    <br>
+    CONFIG_KERNEL_LZO：<br>
+    カーネルをLZOフォーマットでの圧縮にする、展開と圧縮が若干早いらしい。２．６．３３あたりから入ってる<br>
+    <br>
+    CONFIG_RD_LZO：<br>
+    initial ramdisk またはcpio bufferのLZO圧縮のサポートを有効にする。<br>
+    <br>
+    CONFIG_TARGET_LOCALE_NTT：<br>
+    多分SC-02C用ローカルコンフィグ。これから調べ予定<br>
+    <br>
+    CONFIG_VIDEO_TSI：<br>
+    ？？？ワンセグかな<br>
+    <br>
+    CONFIG_ISDBT_FC8100：<br>
+    謎。SGS2のカーネルにだけ存在しているみたい。<br>
+    <br>
+    CONFIG_MMC_CPRM：<br>
+    ？？？<br>
+    <br>
+    <br>
+    <hr>[ひみつのだいある]<br>
+PDA/Phone/CSC Version(Display Current Firmware): *#1234#<br>
+Product Code: *2767*4387264636#<br>
+          <br>
+        </span></span></div>
+    <div><br>
+      色々あるみたい。全部は使えなさそうだけどその他はここ参照：<br>
+    </div>
+    <div><a href="http://forum.xda-developers.com/showthread.php?t=905194">http://forum.xda-developers.com/showthread.php?t=905194</a></div>
+    <br>
+    <span style="font-weight: bold;"><br>
+    </span>
+    <hr>
+    [ODIN3って何？]<br>
+    <br>
+    何でしょうね。<br>
+    おでんさんがアレだしWinでしか動かないので、これを奇特な方がスクラッチビルドしなおしたものが<a checked="true" href="http://www.glassechidna.com.au/products/heimdall/">Heimdall
+
+
+    </a>みたい。<br>
+    <br>
+    <br>
+  </body>
+</html>

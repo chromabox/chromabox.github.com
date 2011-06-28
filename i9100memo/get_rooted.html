@@ -1,0 +1,102 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="start index" href="./">
+    <title>GT-I9100 rootの取り方</title>
+  </head>
+  <body>
+    <h2>GT-I9100 rootの取り方<br>
+    </h2>
+    <p> 無保証。<br>
+      <br>
+      <br>
+    </p>
+    <hr checked="true"><span style="border-collapse: separate; color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+        style="border-collapse: separate; color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">今のところ残念ながらI9100はそのままではroot取りアプリではroot化不可なので、カーネルとか書き換える必要があります。<br>
+現在は一台ではピュアなinitramが取れないですし、なにも手が加わってないzImageも無いのでかなりの危険を伴います。<br>
+LinuxかAndroidに新しいセキュリティホールが見つかれば安全に取れる可能性はあるんですけどね。。。<br>
+        <br>
+      </span></span>
+    <div><span style="border-collapse: separate; color: rgb(0, 0, 0); font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">震える文鎮化への道は次の通り</span></div>
+    <div><br>
+      <hr checked="true">１．ODIN3かHeimdallを何処からか入手</div>
+    <div><br>
+    </div>
+    <div><br>
+      <hr checked="true">２．Insecureなカーネル(initram付きなカーネル)を作るか何処からか入手</div>
+    <div>&nbsp;&nbsp; &nbsp;（<span style="font-weight: bold;">注：国際版では
+        XWKDD_insecure.tarでOKですが、日本版では微妙にローカライズされてます。カーネルをコンパイルしなおして.koを合わせなくてもとりあえず動くそうですが、とワンセグが見れなくなったりいろいろな症状がでるみたいです。そのほかにもinitramもピュアなものから吸い上げないと不味いです。。。文鎮化してもイイ人はどうぞ</span>）</div>
+    <div><br>
+    </div>
+    <div><br>
+      <hr checked="true">３．SuperOneClickを何処からか入手（自分でsu入れられる人は無くても良い）</div>
+    <div><br>
+    </div>
+    <div><br>
+      <hr checked="true">４．端末電源を切り、Volume down + HOME + 電源 で起動。</div>
+    <div><br>
+    </div>
+    <div><br>
+      <hr checked="true">５．画面が出てきたらVolUpを押して次へ</div>
+    <div><br>
+    </div>
+    <div><br>
+      <hr checked="true">６．OdinモードになったらODIN3起動して、その後USBケーブル挿して書く。</div>
+    <div>OdinはrepartisionをOFF、PDAだけにすればよい。</div>
+    <div><br>
+    </div>
+    <div>heimdallの場合はtar玉を展開してzImageを次のコマンドで書く</div>
+    <div><code>$ heimdall flash --kernel zImage</code></div>
+    <div><br>
+    </div>
+    <div><br>
+      <hr checked="true">７．書き込み終わると再起動がかかってroot有効となるので、SuperOneClickを起動し
+      たり色々すればよい。</div>
+    <div><br>
+    </div>
+    <div>もしくはコマンドプロンプトから</div>
+    <div><code>&gt; adb root</code></div>
+    <div><code>&gt; adb remount</code></div>
+    <div><code>&gt; adb push su /system/xbin</code></div>
+    <div><code>&gt; adb shell chmod 4755 /system/xbin/su</code></div>
+    <div>でSuを導入すればOK。</div>
+    <div><br>
+    </div>
+    <div><br>
+      <hr checked="true">８．色々やったら設定がSecureなカーネルを用意して焼き直して戻しておく。<br>
+      一度suを導入したなら、おでんを使わなくても<a href="https://github.com/chromabox/i9100_scripts">ここ</a>にあるスクリプトでもカーネルを書けます。<br>
+      で、Secureなカーネルって何でしょうね。<br>
+    </div><br>
+    <div><br>
+      <hr checked="true">一応上記の方法で行けると思いますが、、<br>
+      えっ何言ってるかわからないとかいうひとは素直に諦めるか、この動画を見て流れをつかんでください。<br>
+      <br>
+      <iframe src="http://www.youtube.com/embed/1_lsLyywJdY" allowfullscreen=""
+        frameborder="0" height="349" width="560"></iframe> <br>
+      <br>
+      <br>
+      <hr checked="true">[おまけ]</div>
+    <div>rootになれば大きな容量のSDを挿してなによりも真っ先に手作業でSDカードへバックアップしておきましょう。</div>
+    <div><br>
+    </div>
+    <div><code>
+        #dd if=/dev/block/mmcblk0p1 of=/sdcard/external_sd/backup/mmcblk0p1.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p2 of=/sdcard/external_sd/backup/mmcblk0p2.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p3 of=/sdcard/external_sd/backup/mmcblk0p3.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p4 of=/sdcard/external_sd/backup/mmcblk0p4.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p5 of=/sdcard/external_sd/backup/mmcblk0p5.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p6 of=/sdcard/external_sd/backup/mmcblk0p6.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p7 of=/sdcard/external_sd/backup/mmcblk0p7.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p8 of=/sdcard/external_sd/backup/mmcblk0p8.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p9 of=/sdcard/external_sd/backup/mmcblk0p9.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p10 of=/sdcard/external_sd/backup/mmcblk0p10.img bs=4096<br>
+        #dd if=/dev/block/mmcblk0p12 of=/sdcard/external_sd/backup/mmcblk0p12.img bs=4096<br>
+        <br>
+        <br>
+        (mmcblk0p11 は内部SD(/sdcard)に繋がっていて11Gのイメージを作ってしまいますし、大変デカイしあまり重要ではないのでここでバックアップはしなくて良いと思う)<br>
+
+  </body>
+</html>

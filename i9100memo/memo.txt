@@ -1,0 +1,99 @@
+[jig の謎と答え]
+
+（あとでまとめます）
+
+文 鎮er最後の綱の某301kΩJigですが、何故301kΩなのかが謎でしたがXDAに面白いスレッドがあった。
+こ れで納得。
+http://forum.xda-developers.com/showthread.php?t=1108103
+
+
+GalazyS とS2のUSBポートで使われているのが、FSA9280というチップ。
+こ れはUSB、オーディオ、UART(COMみたいなもの)の３入力を１つ出力に切り替えるセレクタIC。
+面 白いところが、繋げた先の抵抗値によって何が必要かどうかを自動認識できるようにしたというところ。
+つ まり、本当なら3つ穴あけてコネクタを出すかユーザにどれに繋がってるのかUIを出して選択してもらわないといけないところが、コレを使 うとUSBポート１つでアクセサリーとか色々対応できるわけですね。
+
+
+フェ アチャイルドがUSB関連製品を2品種発売、自動検出機能を搭載したスイッチICなど
+http://eetimes.jp/news/3953
+
+
+で、マイクロUSBの4Pin目はIDとなってお り、ここと5Pin（Gnd）との抵抗値で、今なにを繋げているかという選択できるようになっている。
+301kΩがちょうど[FactoryMode1 jig USB]となっているために、ここに例のJigを挿すとFactoryModeとしてODINモードに強制移行するわけですな。
+
+
+なお、このICには音声もセレクトできるようになっ ていて１MΩを設定するとDP_COMがRight出力、DM＿COMがLeft出力になり、VBUS_OUTがMICに繋がるよう になっている。
+MIC繋がるというこは元々ヘッドセットを想定し て。。。なのかもしれない。。
+
+
+実 際GalaxyとこのICがどう繋がってるかわからないけど、もしかしたらiPodみたいに音声がアンプに流れるようにできるのかもしれ ないですね。
+
+
+・余談
+他のスマホでもヘッドフォン端子が無くて、ヘッドフォンつなげようと思ったらUSB-MicroBにつながる専用のが必要とかだったらコレが実装 されている可能性が高いかも？？
+
+
+
+
+
+
+
+
+
+
+
+
+
+[ファイルシステムのマウント状況]
+次のようになっているみたい。もっとあるかも。
+
+/dev/block/ 
+mmcblk0p1 /efs /dev/mapper/efs efs ext4 NOT_PROTECTED 
+mmcblk0p2 ??? 
+mmcblk0p3 ??? (コメントアウトされているので現在使われていない？？) 
+mmcblk0p4 ??? 
+mmcblk0p5 ??? 
+mmcblk0p6 ???
+mmcblk0p7 /cache /dev/mapper/cache cache ext4 NOT_PROTECTED 
+mmcblk0p8 ??? 
+mmcblk0p9 /system ext4 mmcblk0p10 /data /dev/mapper/data data ext4 PROTECTED_WITH_PASSWORD 
+mmcblk0p11 /sdcard /dev/block/mmcblk0p11 /dev/mapper/sdcard sdcard vfat PROTECTED_WITH_PASSWORD 
+mmcblk0p12 /preload ext4 
+
+mmcblk1 /ext_sdcard /dev/mapper/extsdcard sdcard1 vfat PROTECTED_WITH_PASSWORD 
+
+mmcblk1はスロットのSDカードかな？
+
+http://forum.xda-developers.com/showthread.php?t=1104139の情報を参考にあわせてみ ると見えてくるかも？？
+
+Partition Name START    END      LEN      LEN in BLK   Partition 
+GANG           00000000 00000000 
+BOOT           00000000 00000000 
+EFS            00000000 00000000 013FFFFF 000000A0     0p1 
+SBL1           00000000 00000000 0013FFFF 0000000A     0p2 
+SBL2           00000000 00000000 0013FFFF 0000000A     0p3 
+PARAM          00000000 00000000 007FFFFF 00000040     0p4 
+KERNEL         00000000 00000000 007FFFFF 00000040     0p5 
+RECOVERY       00000000 00000000 007FFFFF 00000040     0p6 
+CACHE          00000000 00000000 063FFFFF 00000320     0p7 
+MODEM          00000000 00000000 00FFFFFF 00000080     0p8 
+FACTORYFS      00000000 00000000 1FFFFFFF 00001000     0p9 
+DATAFS         00000000 00000000 007FFFFF 00000040     0p10 
+UMS            00000000 00000000 E07FFFFF 00007040     0p11 
+HIDDEN         00000000 00000000 001FFFFF 00000010     0p12
+
+なので、パーティションの割り当ては次のようになる
+
+mmcblk0p1 EFS        /efs imeiとか入ってるので色々重要
+mmcblk0p2 SBL1       Jig挿したときにココから復旧するらしい？
+mmcblk0p3 SBL2       Jig 挿したときにココから復旧するらしい？
+mmcblk0p4 PARAM      カーネル起動パラメータ？？
+mmcblk0p5 KERNEL     カーネル＋initramfs本体
+mmcblk0p6 RECOVERY   復旧用？
+mmcblk0p7 CACHE      /cache /dev/mapper/cache cache ext4 NOT_PROTECTED 
+mmcblk0p8 MODEM      モデムコード 
+mmcblk0p9 FACTORYES  /system
+mmcblk0p10 DATAFS    /data  
+mmcblk0p11 UMS       /sdcard 
+mmcblk0p12 HIDDEN     /preload
+
+
