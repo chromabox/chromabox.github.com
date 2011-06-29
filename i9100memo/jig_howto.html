@@ -1,0 +1,67 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="start index" href="./">
+    <title>JIGの動作原理について</title>
+  </head>
+  <body>
+    <h2>JIGの動作原理について<br>
+    </h2>
+    <p> この内容については無保証です。<br>
+    <div>
+      <hr checked="true"><span style="font-weight: bold;">[そもそも何をするものだったのか]</span><br>
+      <br>
+      9100や9000に使われるJIGは、元々Repair(修理用)のツールに使われるものだったそうです。<br>
+      Anywhereとかいう青い箱(なんかICEの類なんでしょう)の一部分とかなんとか。<br>
+<br>
+      なのでああいうモードになったのだと推測されます。<br>
+      <br>
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[JIGを挿すと何が起こるか]</span><br>
+      <br>
+      判っているだけで次のことが起こります。<br>
+      <br>
+      ・電源を入れた瞬間にダウンロードモード（所謂ODIN Mode）に移行<br>
+      ・書き込みカウンタがリセット<br>
+      ・リセットされることにより、一度書いても！三角マークが出なくなる<br>
+      <br>
+      他にも何か起こっている（何か復旧してるとか）のかもしれませんが、判っているのはこれだけです。<br>
+      ただ、３ボタンでダウンロードモードに入る状況とちょっと違って、確認なしにODINモードに突入するため、実行するコードが若干違うのだろうと思います。<br>
+<br>
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[何故、301KΩなのか]</span><br>
+      <br>
+      JIGは301KΩで作るべしといろいろなところに書かれていますが、では何故？？というのは残りますね。<BR>
+      その辺は私も長らく謎だったわけですが、XDAのこのスレを見て理解できました。<BR>
+      http://forum.xda-developers.com/showthread.php?t=1108103 <BR>
+
+      I9000とI9100のMicro USBポートで使われているのが、FSA9280というチップで、これはUSB、オーディオ、UART(COMポートみたいなもの)の3入力を1つの出力に切り替えるためのセレクタICです。<BR>
+      このICの面白いところが、Micro USB Bの4ピン(ID)と5ピン(GND)の間の抵抗値によって機能が変わるというところです。<BR>
+      これによって何が繋がってるかどうか自動認識できるようになってる。。。というわけですね。<BR>
+      <BR>
+      つまり、本当ならば３つ端子を出して対応するか、もしくはユーザに今は何のモードかを選択してもらう必要があるのですが、これを使うとMicro USBの口でアクセサリーとかドッグとか色々対応可能、しかも自動認識カコイイなわけです。<BR>
+      <BR>
+      4ピンと5ピンの抵抗値の差で決まるといいましたが、301KΩが入ると[Factory Mode Boot-ON USB]となるわけで、その仕様どおりブートローダが作ってあるため、あのような画面が出る。。ということです。<BR>
+      <BR>
+      なお、完全に301KΩじゃないとダメかといえばそういうものでもなく、292KΩから316KΩの間なら認識するようになってます。これは抵抗の誤差などを考えてこのような仕様になっているものと思われます。<BR>
+      <BR>
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[他には]</span><br>
+      <br>
+      FSA9280には他にも色々なモードが用意してあり、UARTが使用可能なモードになったりとか、Audioモードになったりとか色々あるようです。多分今後発売されるスタンドアクセサリーとかはこれに対応してるんじゃないかなと推測できます。<BR>
+
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[余談]</span><br>
+      <br>
+他のスマホでもヘッドフォン端子が無くて、ヘッドフォンつなげようと思ったらUSB-MicroBにつながる専用のが必要とかだったらコレが実装 されている可能性が高いかも？？<BR>
+      <br>
+    </div>
+  </body>
+</html>

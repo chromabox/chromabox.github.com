@@ -1,44 +1,3 @@
-[jig の謎と答え]
-
-（あとでまとめます）
-
-文 鎮er最後の綱の某301kΩJigですが、何故301kΩなのかが謎でしたがXDAに面白いスレッドがあった。
-こ れで納得。
-http://forum.xda-developers.com/showthread.php?t=1108103
-
-
-GalazyS とS2のUSBポートで使われているのが、FSA9280というチップ。
-こ れはUSB、オーディオ、UART(COMみたいなもの)の３入力を１つ出力に切り替えるセレクタIC。
-面 白いところが、繋げた先の抵抗値によって何が必要かどうかを自動認識できるようにしたというところ。
-つ まり、本当なら3つ穴あけてコネクタを出すかユーザにどれに繋がってるのかUIを出して選択してもらわないといけないところが、コレを使 うとUSBポート１つでアクセサリーとか色々対応できるわけですね。
-
-
-フェ アチャイルドがUSB関連製品を2品種発売、自動検出機能を搭載したスイッチICなど
-http://eetimes.jp/news/3953
-
-
-で、マイクロUSBの4Pin目はIDとなってお り、ここと5Pin（Gnd）との抵抗値で、今なにを繋げているかという選択できるようになっている。
-301kΩがちょうど[FactoryMode1 jig USB]となっているために、ここに例のJigを挿すとFactoryModeとしてODINモードに強制移行するわけですな。
-
-
-なお、このICには音声もセレクトできるようになっ ていて１MΩを設定するとDP_COMがRight出力、DM＿COMがLeft出力になり、VBUS_OUTがMICに繋がるよう になっている。
-MIC繋がるというこは元々ヘッドセットを想定し て。。。なのかもしれない。。
-
-
-実 際GalaxyとこのICがどう繋がってるかわからないけど、もしかしたらiPodみたいに音声がアンプに流れるようにできるのかもしれ ないですね。
-
-
-・余談
-他のスマホでもヘッドフォン端子が無くて、ヘッドフォンつなげようと思ったらUSB-MicroBにつながる専用のが必要とかだったらコレが実装 されている可能性が高いかも？？
-
-
-
-
-
-
-
-
-
 
 
 
@@ -97,3 +56,173 @@ mmcblk0p11 UMS       /sdcard
 mmcblk0p12 HIDDEN     /preload
 
 
+cat iomem
+03830000-038300ff : s3c64xx-iis-v4
+  03830000-038300ff : s3c64xx-i2s-v4
+05000000-0500ffff : smsc911x
+10070000-100700ff : s3c64xx-rtc
+  10070000-100700ff : s3c64xx-rtc
+100b0000-100b0fff : s5p-tvout-cec
+  100b0000-100b0fff : s5p-tvout-cec
+10830000-10837fff : s5p-ace.0
+10a40000-10a4ffff : s5p-sysmmu.32
+  10a40000-10a4ffff : s5p-sysmmu
+10a50000-10a5ffff : s5p-sysmmu.32
+  10a50000-10a5ffff : s5p-sysmmu
+11800000-1180ffff : s3c-fimc.0
+  11800000-1180ffff : s3c-fimc
+11810000-1181ffff : s3c-fimc.1
+  11810000-1181ffff : s3c-fimc
+11820000-1182ffff : s3c-fimc.2
+  11820000-1182ffff : s3c-fimc
+11830000-1183ffff : s3c-fimc.3
+  11830000-1183ffff : s3c-fimc
+11840000-1184ffff : s5p-jpeg
+  11840000-1184ffff : s5p-jpeg
+11880000-1188ffff : s3c-csis.0
+  11880000-1188ffff : s3c-csis
+11890000-1189ffff : s3c-csis.1
+  11890000-1189ffff : s3c-csis
+11a20000-11a2ffff : s5p-sysmmu.32
+  11a20000-11a2ffff : s5p-sysmmu
+11a30000-11a3ffff : s5p-sysmmu.32
+  11a30000-11a3ffff : s5p-sysmmu
+11a40000-11a4ffff : s5p-sysmmu.32
+  11a40000-11a4ffff : s5p-sysmmu
+11a50000-11a5ffff : s5p-sysmmu.32
+  11a50000-11a5ffff : s5p-sysmmu
+11a60000-11a6ffff : s5p-sysmmu.32
+  11a60000-11a6ffff : s5p-sysmmu
+11c00000-11c0ffff : s3cfb.0
+  11c00000-11c0ffff : s3cfb
+11c40000-11c47fff : ielcd
+11ca0000-11ca0fff : mdnie
+11e20000-11e2ffff : s5p-sysmmu.32
+  11e20000-11e2ffff : s5p-sysmmu
+12220000-1222ffff : s5p-sysmmu.32
+  12220000-1222ffff : s5p-sysmmu
+12480000-1248ffff : s3c_otghcd
+  12480000-1248ffff : s3c-usbgadget
+12500000-125000ff : s3c-tsi
+  12500000-125000ff : s3c-tsi
+12530000-12530fff : s3c-sdhci.2
+  12530000-12530fff : mmc1
+12540000-12540fff : s3c-sdhci.3
+  12540000-12540fff : mmc2
+12550000-12550fff : s3c-mshci.0
+  12550000-12550fff : mmc0
+12580000-1258ffff : s5p-ehci
+  12580000-1258ffff : ehci_hcd
+12620000-1262ffff : s5p-sysmmu.32
+  12620000-1262ffff : s5p-sysmmu
+12680000-12681000 : s3c-pl330.1
+  12680000-12681000 : s3c-pl330
+12690000-12691000 : s3c-pl330.2
+  12690000-12691000 : s3c-pl330
+12700000-12700100 : s3c-gib.0
+12800000-128007ff : s5p-fimg2d
+  12800000-128007ff : s5p-fimg2d
+12a20000-12a2ffff : s5p-sysmmu.32
+  12a20000-12a2ffff : s5p-sysmmu
+12a30000-12a3ffff : s5p-sysmmu.32
+  12a30000-12a3ffff : s5p-sysmmu
+12a40000-12a4ffff : s5p-sysmmu.32
+  12a40000-12a4ffff : s5p-sysmmu
+12c00000-12c0ffff : s5p-vp
+  12c00000-12c0ffff : s5p-vp
+12c10000-12c1ffff : s5p-mixer
+  12c10000-12c1ffff : s5p-mixer
+12c20000-12c2ffff : s5p-sdo
+  12c20000-12c2ffff : s5p-sdo
+12d00000-12dfffff : s5p-hdmi
+  12d00000-12dfffff : s5p-hdmi
+12e20000-12e2ffff : s5p-sysmmu.32
+  12e20000-12e2ffff : s5p-sysmmu
+13000000-13000097 : Mali-400 GP
+13001000-1300102f : Mali-400 L2 cache
+13003000-13003023 : Mali-400 MMU for GP
+13004000-13004023 : Mali-400 MMU for PP 0
+13005000-13005023 : Mali-400 MMU for PP 1
+13006000-13006023 : Mali-400 MMU for PP 2
+13007000-13007023 : Mali-400 MMU for PP 3
+13008000-130090ef : Mali-400 PP 0
+1300a000-1300b0ef : Mali-400 PP 1
+1300c000-1300d0ef : Mali-400 PP 2
+1300e000-1300f0ef : Mali-400 PP 3
+13400000-1340ffff : s3c-mfc
+  13400000-1340ffff : s3c-mfc
+13620000-1362ffff : s5p-sysmmu.32
+  13620000-1362ffff : s5p-sysmmu
+13630000-1363ffff : s5p-sysmmu.32
+  13630000-1363ffff : s5p-sysmmu
+13800000-13800100 : s5pv210-uart.0
+  13800000-138000ff : s5pv210-uart
+13810000-13810100 : s5pv210-uart.1
+  13810000-138100ff : s5pv210-uart
+13820000-13820100 : s5pv210-uart.2
+  13820000-138200ff : s5pv210-uart
+13830000-13830100 : s5pv210-uart.3
+  13830000-138300ff : s5pv210-uart
+13840000-13840100 : s5pv210-uart.4
+  13840000-138400ff : s5pv210-uart
+13860000-13860fff : s3c2410-i2c.0
+  13860000-13860fff : s3c2410-i2c
+13870000-13870fff : s3c2410-i2c.1
+  13870000-13870fff : s3c2410-i2c
+13890000-13890fff : s3c2410-i2c.3
+  13890000-13890fff : s3c2410-i2c
+138b0000-138b0fff : s3c2410-i2c.5
+  138b0000-138b0fff : s3c2410-i2c
+138c0000-138c0fff : s3c2410-i2c.6
+  138c0000-138c0fff : s3c2410-i2c
+138d0000-138d0fff : s3c2410-i2c.7
+  138d0000-138d0fff : s3c2410-i2c
+138e0000-138e03ff : s5p-i2c-hdmi-phy
+  138e0000-138e03ff : s5p-i2c-hdmi-phy
+13910000-13911fff : s3c64xx-adc
+40000000-4fffffff : System RAM
+  403fd000-40dd0fff : Kernel text
+  40e36000-410a3677 : Kernel data
+50000000-5fffffff : System RAM
+60000000-66ffffff : System RAM
+67000000-6fffffff : System RAM
+70000000-7fffffff : System RAM
+$
+
+$ cat partitions
+major minor  #blocks  name
+
+ 179        0   15387648 mmcblk0
+ 179        1      20480 mmcblk0p1
+ 179        2       1280 mmcblk0p2
+ 179        3       1280 mmcblk0p3
+ 179        4       8192 mmcblk0p4
+ 179        5       8192 mmcblk0p5
+ 179        6       8192 mmcblk0p6
+ 179        7     102400 mmcblk0p7
+ 179        8      16384 mmcblk0p8
+ 179        9     626688 mmcblk0p9
+ 179       10    2097152 mmcblk0p10
+ 179       11   12066816 mmcblk0p11
+ 179       12     421888 mmcblk0p12
+ 179       16   15646720 mmcblk1
+ 179       17   15642624 mmcblk1p1
+
+
+mmcblk0p12 はext4であり、プリインストール用のAPKが入ってるようだ。
+以下でマウントできる。
+# mount -o loop mmcblk0p12.img /mnt/temp
+# ls /mnt/temp/app/
+Android_EPG_Shortcut.apk      Koe_no_Takuhaibin_MixedIn.apk                dmapnavi_navi.apk
+BeeTV.apk                     KumsungJpnToKorDictionaryUCS2LESUIDDBwH.dat  iChannel.apk
+BookShelf_preset.apk          KumsungKorToJpnDictionaryUCS2LESUIDDBwH.dat  mcd_pre2_signed.apk
+DioDictFntS3.ttf              ObunshaEngToJpnDictionaryUCS2LESUIDDBwH.dat  melodycall.apk
+EcoModeDownload.apk           ObunshaJpnToEngDictionaryUCS2LESUIDDBwH.dat  nttdocomo_gs_utility_downloader.apk
+EstarAP1DL.apk                Rakuokudownloader.apk                        toruca.apk
+Evernote_launcher.docomo.apk  TwonkyMobile_DoCoMo.apk
+
+
+mmcblk0p4 は/mnt/.lfsにマウントされており、j4fs形式(独自形式)で保存されている。
+Galaxyのロゴとかdocomoのロゴとか入ってる
+
+$
