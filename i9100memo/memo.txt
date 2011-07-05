@@ -1,27 +1,6 @@
 
 
 
-
-[ファイルシステムのマウント状況]
-次のようになっているみたい。もっとあるかも。
-
-/dev/block/ 
-mmcblk0p1 /efs /dev/mapper/efs efs ext4 NOT_PROTECTED 
-mmcblk0p2 ??? 
-mmcblk0p3 ??? (コメントアウトされているので現在使われていない？？) 
-mmcblk0p4 ??? 
-mmcblk0p5 ??? 
-mmcblk0p6 ???
-mmcblk0p7 /cache /dev/mapper/cache cache ext4 NOT_PROTECTED 
-mmcblk0p8 ??? 
-mmcblk0p9 /system ext4 mmcblk0p10 /data /dev/mapper/data data ext4 PROTECTED_WITH_PASSWORD 
-mmcblk0p11 /sdcard /dev/block/mmcblk0p11 /dev/mapper/sdcard sdcard vfat PROTECTED_WITH_PASSWORD 
-mmcblk0p12 /preload ext4 
-
-mmcblk1 /ext_sdcard /dev/mapper/extsdcard sdcard1 vfat PROTECTED_WITH_PASSWORD 
-
-mmcblk1はスロットのSDカードかな？
-
 http://forum.xda-developers.com/showthread.php?t=1104139の情報を参考にあわせてみ ると見えてくるかも？？
 
 Partition Name START    END      LEN      LEN in BLK   Partition 
@@ -209,20 +188,15 @@ major minor  #blocks  name
  179       17   15642624 mmcblk1p1
 
 
-mmcblk0p12 はext4であり、プリインストール用のAPKが入ってるようだ。
-以下でマウントできる。
-# mount -o loop mmcblk0p12.img /mnt/temp
-# ls /mnt/temp/app/
-Android_EPG_Shortcut.apk      Koe_no_Takuhaibin_MixedIn.apk                dmapnavi_navi.apk
-BeeTV.apk                     KumsungJpnToKorDictionaryUCS2LESUIDDBwH.dat  iChannel.apk
-BookShelf_preset.apk          KumsungKorToJpnDictionaryUCS2LESUIDDBwH.dat  mcd_pre2_signed.apk
-DioDictFntS3.ttf              ObunshaEngToJpnDictionaryUCS2LESUIDDBwH.dat  melodycall.apk
-EcoModeDownload.apk           ObunshaJpnToEngDictionaryUCS2LESUIDDBwH.dat  nttdocomo_gs_utility_downloader.apk
-EstarAP1DL.apk                Rakuokudownloader.apk                        toruca.apk
-Evernote_launcher.docomo.apk  TwonkyMobile_DoCoMo.apk
+
+--------------------------------------------------------------------------------
+何故かinclude/linuxにfsa9480.hが居る。。。
+fsa9480はJIGに深く関わっている。
 
 
-mmcblk0p4 は/mnt/.lfsにマウントされており、j4fs形式(独自形式)で保存されている。
-Galaxyのロゴとかdocomoのロゴとか入ってる
 
-$
+
+
+
+
+

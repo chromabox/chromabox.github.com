@@ -1,0 +1,378 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="start index" href="./">
+    <title>パーティション周りの調査</title>
+  </head>
+  <body>
+    <h2>パーティション周りの調査<br>
+    </h2>
+    <p> この内容については無保証です。<br>
+    <p> I9100のパーティション周りについてまとめています。<br>
+    <div>
+      <hr checked="true"><span style="font-weight: bold;">[ファイルシステムのマウント状況]</span><br>
+      <br>
+      内部NANDメモリは次のようになっている。なんと、サイズは16GBも積んでいる。。。。<BR>
+      多分OneNANDだろう。。<BR>
+      デバイスのメジャー番号は全て179。ここでいうBlockは1024Byte。<BR>
+      <br>
+    <table width="100%" border="1">
+      <tbody>
+        <tr>
+          <td>device<br />
+          </td>
+          <td>mount point<br />
+          </td>
+          <td>file system<br />
+          </td>
+          <td>mount option<br />
+          </td>
+          <td>block size<br />
+          </td>
+          <td>size<br />
+          </td>
+          <td>comment<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0<br />
+          </td>
+          <td><br />
+          </td>
+          <td><br />
+          </td>
+          <td><br />
+          </td>
+          <td>15,387,648<br />
+          </td>
+          <td>15,756,951,552<br />
+          </td>
+          <td>パーティションが切られるデバイスの元。Linux上では全て一つのNAND-Flashにマッピングされている。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p1<br />
+          </td>
+          <td>/efs<br />
+          </td>
+          <td>ext4<br />
+          </td>
+          <td>NOT_PROTECTED<br />
+          </td>
+          <td>20,480<br />
+          </td>
+          <td>20,971,520<br />
+          </td>
+          <td>linuxでは/efsにマウントされている領域。imeiとか入ってるので色々何かと重要。<br>
+          なくすと変えが効かないのでバックアップしておいたほうが無難<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p2<br />
+          </td>
+          <td>none<br />
+          </td>
+          <td>???<br />
+          </td>
+          <td><br />
+          </td>
+          <td>1,280<br />
+          </td>
+          <td>1,310,720<br />
+          </td>
+          <td>SBL1と呼ばれる。Secondary Boot Loaderなので、２次ブートローダ<br>
+          これを損傷すると復帰方法が無く文鎮確実なので、よほどのことが無い限り書かないほうが良いし、バックアップしておいたほうが良い<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p3<br />
+          </td>
+          <td>none<br />
+          </td>
+          <td>???<br />
+          </td>
+          <td><br />
+          </td>
+          <td>1,280<br />
+          </td>
+          <td>1,310,720<br />
+          </td>
+          <td>SBL2と呼ばれる。ダンプしたところ0で埋められている。用途不明。ブートローダ復活用？？<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p4<br />
+          </td>
+          <td>/mnt/.lfs<br />
+          </td>
+          <td>j4fs<br />
+          </td>
+          <td><br />
+          </td>
+          <td>8,192<br />
+          </td>
+          <td>8,388,608<br />
+          </td>
+          <td>/mnt/.lfsにマウントされている。j4fs形式という独自の形式。別名PARAMと呼ばれる。<br>Galaxyのロゴとかdocomoのロゴとかがある。多分二次ブートローダが使うのでこの形式なんだろうと<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p5<br />
+          </td>
+          <td>none<br />
+          </td>
+          <td>(zImage)<br />
+          </td>
+          <td><br />
+          </td>
+          <td>8,192<br />
+          </td>
+          <td>8,388,608<br />
+          </td>
+          <td>カーネルイメージが入る。このイメージは展開ルーチン+圧縮(initramfs+カーネル本体)<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p6<br />
+          </td>
+          <td>none<br />
+          </td>
+          <td><br />
+          </td>
+          <td><br />
+          </td>
+          <td>8,192<br />
+          </td>
+          <td>8,388,608<br />
+          </td>
+          <td>内部名RECOVERY。今のところは0で埋められている。用途不明。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p7<br />
+          </td>
+          <td>/cache<br />
+          </td>
+          <td>ext4<br />
+          </td>
+          <td>NOT_PROTECTED<br />
+          </td>
+          <td>102,400<br />
+          </td>
+          <td>104,857,600<br />
+          </td>
+          <td>キャッシュ。/dev/mapper/cacheと関係がある。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p8<br />
+          </td>
+          <td>none<br />
+          </td>
+          <td>???<br />
+          </td>
+          <td><br />
+          </td>
+          <td>16,384<br />
+          </td>
+          <td>16,777,216<br />
+          </td>
+          <td>内部名MODEM。、ベースバンドチップ用のcodeが入っている。<br>
+          通常、アプリとベースバンド(モデムとかアノ辺り)用は分けるのでこうなっている。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p9<br />
+          </td>
+          <td>/system<br />
+          </td>
+          <td>ext4<br />
+          </td>
+          <td><br />
+          </td>
+          <td>626,688<br />
+          </td>
+          <td>641,728,512<br />
+          </td>
+          <td>内部名FACTORY。factoryfsといえばココを指す。<br>
+          重要なアプリやフレームワークが入ってるのでバックアップしておいたほうが良い。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p10<br />
+          </td>
+          <td>/data<br />
+          </td>
+          <td>ext4<br />
+          </td>
+          <td>PROTECTED_WITH_PASSWORD<br />
+          </td>
+          <td>2,097,152<br />
+          </td>
+          <td>2,147,483,648<br />
+          </td>
+          <td>内部名DATA。/dev/mapper/dataとも関連する。<br>
+          普通にアプリとか、設定データなどが入っている。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p11<br />
+          </td>
+          <td>/sdcard<br />
+          </td>
+          <td>vfat<br />
+          </td>
+          <td>PROTECTED_WITH_PASSWORD<br />
+          </td>
+          <td>12,066,816<br />
+          </td>
+          <td>12,356,419,584<br />
+          </td>
+          <td>内部名UMS。/dev/mapper/sdcardとも関連する。<br>
+          NANDのほぼ残り容量がマッピングされているので大変大きい<br>
+          普通のAndroid携帯ならここは外部SDカードのはずだが、i9100は外部SDは通常ここになる。内部メモリなのでアプリ起動の機敏さに貢献している。本当の外部SDはここからリンクされているexternal_sdとなる。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>/dev/mmcblk0p12<br />
+          </td>
+          <td>/preload<br>(通常はマウントされない)<br />
+          </td>
+          <td>ext4<br />
+          </td>
+          <td><br />
+          </td>
+          <td>421,888<br />
+          </td>
+          <td>432,013,312<br />
+          </td>
+          <td>内部名HIDDEN。<br>
+          おそらく復旧かアップデート用。<br>
+          ext4でマウントでき、プリインストール用のapk等が入っているので消しても復活するとかは多分コレが関与している。<br />
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+      <br>
+外部SDはmmcblk1pにマッピングされる。(mmcblk1p1)<br>
+<br>
+I9000のときは色々ごちゃごちゃしていたのがすっきりマッピングされている。<br>
+<br>
+これらはlinuxのMTDのようにデバイスファイルにマッピングされてファイルとして扱えるので、cpやらddやらcatで読んだり書いたり出来る(当然root権必要)<br>
+zImageなんかを自作する場合は、大体8Mに収めればOK。<BR>
+factoryfsは640M程度に収めればOK。<BR>
+<br>
+パーティション情報はKernelに決めうちでは無かったので、NANDの先頭かどこかにパーティションテーブルがあってそれを読んで自動判別しているのでしょう。<br>
+
+<br>
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[mmcblk0p12の内容]</span><br>
+<br>
+mmcblk0p12 はext4であり、プリインストール用のAPKが入ってる。<BR>
+Linuxシステムでは以下でマウントできる。<BR>
+<BR>
+# mount -o loop mmcblk0p12.img /mnt/temp<BR>
+<br>
+appディレクトリを表示すると次のようになっている。<br>
+<code><pre>
+Android_EPG_Shortcut.apk      Koe_no_Takuhaibin_MixedIn.apk                dmapnavi_navi.apk
+BeeTV.apk                     KumsungJpnToKorDictionaryUCS2LESUIDDBwH.dat  iChannel.apk
+BookShelf_preset.apk          KumsungKorToJpnDictionaryUCS2LESUIDDBwH.dat  mcd_pre2_signed.apk
+DioDictFntS3.ttf              ObunshaEngToJpnDictionaryUCS2LESUIDDBwH.dat  melodycall.apk
+EcoModeDownload.apk           ObunshaJpnToEngDictionaryUCS2LESUIDDBwH.dat  nttdocomo_gs_utility_downloader.apk
+EstarAP1DL.apk                Rakuokudownloader.apk                        toruca.apk
+Evernote_launcher.docomo.apk  TwonkyMobile_DoCoMo.apk
+</code></pre>
+    </div>
+    
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[ブートの仕組み]</span><br>
+      <br>
+      パーティションには記されていないが、GANGとBOOTの領域が存在している。<BR>
+      BOOTは一次ブートローダ。<BR>
+      これら2つはNORフラッシュ、もしくはROMなのでLinuxが走り出すと出てこない(出てくる必要が無い<BR>
+      <BR>
+      OMAPなどの他のCPUもそうなので、このCPUもおそらくこうなっているはず。<BR>
+      <BR>
+      電源ON→1次Bootが起動→DRAMなど最低限の周辺を初期化→1次BootがNANDのmmcblk0p2の内容を読んでDRAMに展開→2次Bootが起動→2次BootがLinuxを起動→start_kernel()→initをexec実行→…色々あってAndroidが軌道に乗る。。。という流れ。
+      <br>
+    </div>
+    
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[mmcblk0p2(通称2次ブートローダ)について]</span><br>
+      <br>
+mmcblk0p2には2次ブートローダのコードが入っている<BR>
+おそらく起動時のDOCOMOロゴを出したりビックリマークを出しているのはこいつ<BR>
+JIGを挿したり3ボタンで入るODINモードは一次ブートローダが出しているか、二次ブートが出しているかは謎。(USB通信とかしたりフラッシュを書かないと不味いので、多分二次だと思う)<BR>
+<BR>
+文字列を拾い上げるとなかなか興味深い内容になっている。<BR>
+コードのほかにもJPEGのヘッダがあったので、画像データが何枚か入ってるみたい。
+<BR>
+(一部抜粋)<BR>
+
+Secondary Bootloader v3.1 version.<BR>
+モロに書いてあった。<BR>
+<BR>
+Autoboot (%d seconds) in progress, press any key to stop <BR>
+何らかのキーを受け付ける感じがする<BR>
+<BR>
+setenv<BR>
+U-bootにも同じようなコマンドがある。多分環境変数を保存するためのもの<BR>
+<BR>
+/mnt/rsv<BR>
+謎のマウントポイント<BR>
+<BR>
+JFIF APP0 marker: version %d.%02d, density %dx%d  %d<BR>
+APP0はJPEGのとあるチャンク。おそらくJPEGを読むcodeが内包されている。<BR>
+<BR>
+<code><pre>
+format
+        format device
+open
+        open device
+close
+        close device
+erasepart partition_id
+        erase part of units
+       - ex) erase 0x9(temp partition)
+eraseall
+        erase all units
+showpart
+        show partition information
+addpart <id> <attr> <unit>
+        add partition information
+       - ex) addpart 0x(id) 0x1(attr) 0x10(units)
+delpart
+        delete last partition information
+savepart
+        save partition information
+nkernel command
+* Usage : nkernel
+        read kernel from flash to DDR
+* Usage : nandread <PARTID> <SIZE>
+        read partition from flash to SDRAM(0x80000000)
+* Usage: nandwrite <PARTID> <SIZE>
+        write partition from SDRAM(0x80000000) to flash
+</code></pre>
+これらはおそらくブートローダのコマンドヘルプ。<br>
+<br>
+<br>
+とまぁ、何故製品版のBootloaderにコレが残っているのかは謎ですが、UARTを繋げることが出来ればコレが操作できるかもしれない。<br>
+
+    </div>
+    
+    
+    
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[dfコマンドで出てくるasecエントリとは]</span><br>
+      <br>
+      dfコマンドで出てくるasecエントリは、AppOnSD機能と関連性がある。<br>
+      /dataにインストールしたアプリをSDに移動して実行すると出てくる。<br>
+    </div>
+  </body>
+</html>
