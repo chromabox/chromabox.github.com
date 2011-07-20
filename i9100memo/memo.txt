@@ -194,9 +194,127 @@ major minor  #blocks  name
 fsa9480はJIGに深く関わっている。
 
 
+--------------------------------------------------------------------------------
+いろいろなカーネルの違い
+GT-19100は地域によってカーネルが違うことがわかっている。
+
+[事の発端]
+なんとなく出荷時のカーネルに戻してみよう思い立ち元に戻したところ、自分で作ったカーネルよりも少し挙動が違っていたので、「これはもしや公開されているカーネルとは違うのでは。。。」という考えに至り、調べてみました。
+
+数日間出荷時カーネルを使っていてなんとなく感じたのは次の通り
+・画面がやや黄色っぽい
+・なんだかオート輝度設定が敏感な感じがする
+・充電がどうも遅い感じがする？(勘違いかも)
+
+
+[ソースの種類]
+公式に公開されているソースは次の通り。（もっとあるかもしれません）
+
+I9100 SGH-N033 EUR ：俗に言う国際版
+I9100 EUR Update1  ：7月中ごろに出た国際版のアップデート版(カーネルのみ)
+I9100 HK CHR       ；香港版。SIMフリーらしい
+SHW-M250K          ：韓国版のI9100(KT向け)
+SHW-M250K Update1  ：韓国版のI9100(バージョンアップ版。カーネルのみ)
+SHW-M250S          ：韓国版のI9100(SKテレコム向け)
+SHW-M250S Update1  ：韓国版のI9100(バージョンアップ版。カーネルのみ)
+SHW-M250L          ：韓国版のI9100(LG U+向け)
+SHW-M250L Update1  ：韓国版のI9100(バージョンアップ版。カーネルのみ)
+
+[シンボルの違い]
+
+当初、日本版SC-02CはビルドバージョンがN033であることから国際版が流用されていると思われていたが実際は色々違う。
+購入時に入っているカーネルを調べると、現在OpenSourceとして公開されている国際版のソースとは違う点が見つかっている
+
+具体的に言うと、出荷時カーネルには
+SEQ_INIT_DISPLAY_SETTING_SM2_A2
+があるのだが、国際版にはこれがなかった。(Update1でようやく入った)
+
+(SEQ_INIT_DISPLAY_SETTING_SM2_A2はAMOLEDの色テーブル関連の様子)
+
+
+[ソースの違い]
+ざっとみたところ、こんな感じ。
+
+I9100 HK CHR と SHW-M250X Update1は微妙に違うけどかなり近い。
+SHW-M250X とSHW-M250XUpdate1はアップデート版なだけあってソースがそこそこ違う
+SHW-M250X とI9100 SGH-N033では韓国版の変更が多少加わっている。ソースは良く似ている。
+
+SHW-M250KとSは殆ど同じ。SHW-M250KとSのUpdate1でさらに同じになった。
+ただ、やっぱり微妙な違いは存在していて、dev_attr_gyro_power_onなどがKにはあるがSにはない等ある。
+
+SHW-M250LはConfigが微妙に違ったり(LはNFCなしモデル)、GPIOの定義がちょっと違ったりKとSとは微妙に異なる。
+
+I9100 EUR Update1は I9100 HK CHRと大変良く似ている。Sleep.sのTLBの修正など、M250Kから持ってきたやばそうな修正点が幾つか入っているので修正版と見てよさそう。
+
+
+開発の時系列としてはこんな感じかもしれない
+
+I9100 SGH-N033 EUR (ベース) → SHW-M250x → SHW-M250x Update1
+                             |---------- → I9100 HK CHR → EUR Update1
+
+ソースを見ると日本版とM250S_Update1がもっとも良く似ている？？
+（M250Kは日本版には無いシンボルが幾つか存在している）
+
+
+[コンフィグの注意点]
+あわせなくても一応動くがあわせておいたほうが良い。
+
+・CONFIG_THERMALとCONFIG_DEV_THERMALをYにしておかないといけない。
+
+
+[Eur Update1とSC-02Cとの違い]
+それでも製品版には無いシンボルが幾つか存在している。ので、厳密には完全一致とは言えない。
+
+
+・何処かのソースにはあるもの
+
+watchdog_init
+  CONFIG_WATCHDOGをYにしてもだめだった。(実は c1-watchdogが外されている。韓国版ではMakefileに入っている）
+
+dmb_init_hw_setting
+  drivers/media/isdbt/fc8100/fc8100.c に存在。(SGH-N033にある)
+  （dmb_init_hw_settingとdmb_hw_settingがまったく同じなので削除された模様）
+
+last_uevent_state
+  drivers/media/video/samsung/tvout/s5p_tvout_hpd.c に存在(SGH-N033にある)
+  (多分いらないものと思われる)
+
+・SC02Cにだけあって、どのカーネルにも無いもの
+
+l2x0_nolock_clean_all 
+m5mo_set_recording_state
+sec_bat_get_recording_state
+checkfilename_do_truncate
+sdhci_init_card
+
+__param_str_sec_pet 
+__param_str_sec_reset 
+isRecording
+calculate_average_adc drivers/power/sec_battery.c 
+(実はここに定義してあるものの、Update1では出てこない)
+
+
+[実際に焼いてみると]
+Update1版を焼いてみたところ、出荷時のものと良く似た挙動になった（なんか暗かったりするところとか）
+dmesgもまぁまぁ近い。
+
+
+[コンパイラについて]
+なるべく公式版とあわせようと思ったら、Androidのソースのprebuildに入っているgcc4.4.0を使うほうが良い。
+
+READMEにはCodesoucerlyのものを使うべしと書いてあるが、韓国版には何故かビルドスクリプトが入っており、そこに書いてあるgccへのパスはどうみてもAndroidソースのprebuildのものを使っている故。
 
 
 
 
+[用語]
 
+CM3663 照度センサー＆近接センサー
+ak8975 地磁気センサー(方位磁石)
+K3G Gyroscope ジャイロスコープ。Gyroとか出てきたら大抵これ
+K3DH Acceleration Sensor 三軸加速度センサー
+max8997 電源管理、MicroUSB関連のIC。このへんにJIG関連のことがある。
+(drivers/misc/max8997-muic.c)
+ld9040 AMOLED関連
+NXP PN544 使用されているであろうと思われるNFCチップ
 
