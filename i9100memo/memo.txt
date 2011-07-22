@@ -305,16 +305,95 @@ dmesgもまぁまぁ近い。
 READMEにはCodesoucerlyのものを使うべしと書いてあるが、韓国版には何故かビルドスクリプトが入っており、そこに書いてあるgccへのパスはどうみてもAndroidソースのprebuildのものを使っている故。
 
 
+[touchLED関連]
+/sys/devices/virtual/misc/melfas_touchkey/brightness
+1を書くと光る。2を書くと消灯。
+但し起き上がっている場合のみ。。
+$ echo 1 > /sys/devices/virtual/misc/melfas_touchkey/brightness 
+なんかで出来る。
+
+[max8997関連]
+
+include/linux/mtd/max8997.hに次のような定義がある。
+
+typedef enum cable_type {
+        CABLE_TYPE_NONE = 0,
+        CABLE_TYPE_USB,
+        CABLE_TYPE_OTG,
+        CABLE_TYPE_TA,
+        CABLE_TYPE_DESKDOCK,
+        CABLE_TYPE_CARDOCK,
+        CABLE_TYPE_JIG_UART_OFF,
+        CABLE_TYPE_JIG_UART_OFF_VB,     /* VBUS enabled */
+        CABLE_TYPE_JIG_UART_ON,
+        CABLE_TYPE_JIG_USB_OFF,
+        CABLE_TYPE_JIG_USB_ON,
+        CABLE_TYPE_MHL,
+        CABLE_TYPE_MHL_VB,
+        CABLE_TYPE_UNKNOWN
+} cable_type_t;
+
+[sysfsの歩き方]
+/sys/bus/i2c/drivers 
+にbusに繋がってるものが色々ある
+
+max8997/5-0066/max8997-muic
+に、今USBで何が繋がっているかの情報取得がある。
+
+{
+        ADC_GND                 = 0x00,
+        ADC_MHL                 = 0x01,
+        ADC_DOCK_VOL_DN         = 0x0a, //  1010 Audio Remote S9
+        ADC_DOCK_VOL_UP         = 0x0b, //  1010 Audio Remote S10
+        ADC_CEA936ATYPE1_CHG    = 0x17, // 10111 CARkit Type1 Charger
+        ADC_JIG_USB_OFF         = 0x18, // 11000 Factory mode Boot OFF-USB
+        ADC_JIG_USB_ON          = 0x19, // 11001 Factory mode Boot ON-USB
+        ADC_DESKDOCK            = 0x1a, // 11010 DO NOT USE
+        ADC_CEA936ATYPE2_CHG    = 0x1b, // 11011 CARkit Type2 Charger
+        ADC_JIG_UART_OFF        = 0x1c, // 11100 Factory mode Boot OFF-UART
+        ADC_JIG_UART_ON         = 0x1d, // 11101 Factory mode Boot ON-UART
+        ADC_CARDOCK             = 0x1d,
+        ADC_OPEN                = 0x1f
+}
+この後ろの値は完全に一致している？？？
+実験が必要かも？
+
+
+[max8997について]
+USB-MicroBに繋がるとコレが色々やって動いている。
+USBに何か挿すとmuicが反応する。
+
+dmesgをみるとこんなのを返してくる
+<6>[43984.457849] max8997-muic max8997-muic: max8997_muic_irq: irq:589
+<6>[43984.458446] max8997-muic max8997-muic: max8997_muic_detect_dev: STATUS1:0x
+3f, 2:0x48
+<6>[43984.458508] max8997-muic max8997-muic: max8997_muic_detect_dev: DETACHED
+<6>[43984.459615] max8997-muic max8997-muic: max8997_muic_handle_detach: duplica
+ted(NONE)
+<6>[43984.460139] max8997 5-0066: max8997_irq_thread: irq:331, irq_src:0x0
+<4>[43984.460194] max8997 5-0066: Unused interrupt source: 0x0
+<6>[43984.543453] max8997 5-0066: max8997_irq_thread: irq:331, irq_src:0x8
+<6>[43984.544163] max8997-muic max8997-muic: max8997_muic_irq: irq:585
+<6>[43984.544755] max8997-muic max8997-muic: max8997_muic_detect_dev: STATUS1:0x
+3f, 2:0x41
+<6>[43984.544816] max8997-muic max8997-muic: max8997_muic_detect_dev: ATTACHED
+<6>[43984.544883] max8997-muic max8997-muic: max8997_muic_attach_usb_type:USB
+
+
+1kΩ=MHLになるらしい？？？
+色々実験必要ですな。
 
 
 [用語]
 
-CM3663 照度センサー＆近接センサー
-ak8975 地磁気センサー(方位磁石)
-K3G Gyroscope ジャイロスコープ。Gyroとか出てきたら大抵これ
+CM3663                   照度センサー＆近接センサー
+ak8975                   地磁気センサー(方位磁石)
+K3G Gyroscope            ジャイロスコープ。Gyroとか出てきたら大抵これ
 K3DH Acceleration Sensor 三軸加速度センサー
-max8997 電源管理、MicroUSB関連のIC。このへんにJIG関連のことがある。
+max8997                  電源管理、MicroUSB関連のIC。このへんにJIG関連のことがある。
 (drivers/misc/max8997-muic.c)
-ld9040 AMOLED関連
-NXP PN544 使用されているであろうと思われるNFCチップ
+ld9040                   AMOLED関連
+NXP PN544                使用されているであろうと思われるNFCチップ
+M5MO                     8MP Camera
+Sil9244                  MHL Transmitter HDMI出力用らしい。
 
