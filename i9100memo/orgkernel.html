@@ -35,6 +35,7 @@
 I9100 SGH-N033 EUR ：俗に言う国際版
 I9100 EUR Update1  ：7月中ごろに出た国際版のアップデート版(カーネルのみ)
 I9100 HK CHR       ；香港版。SIMフリーらしい
+I9100 CHR CHR      ；中国版。
 SHW-M250K          ：韓国版のI9100(KT向け)
 SHW-M250K Update1  ：韓国版のI9100(バージョンアップ版。カーネルのみ)
 SHW-M250S          ：韓国版のI9100(SKテレコム向け)
@@ -73,12 +74,14 @@ SHW-M250LはConfigが微妙に違ったり(LはNFCなしモデル)、GPIOの定�
 <BR>
 I9100 EUR Update1は I9100 HK CHRと大変良く似ている。Sleep.sのTLBの修正など、M250Kから持ってきたやばそうな修正点が幾つか入っているのでHK CHRの修正版と見てもよさそう。<BR>
 <BR>
+I9100 CHR CHRは後発だが、Sleep.sのTLBの修正がなかったりするので多分そんなには新しくない。<BR>
 <BR>
 開発の時系列としてはこんな感じかもしれない<BR>
 <code><pre>
 I9100 SGH-N033 EUR (ベース) ---> SHW-M250x ----------------------> SHW-M250x Update1
-                             +---------- → I9100 HK CHR --------> EUR Update1
-                             +----------------------------->SC-02C(?)
+                             +-----------> I9100 HK CHR ---------> EUR Update1
+                             +------------------> I9100 CHR CHR 
+                             +--------------->SC-02C(KF2)-->SC-02C(KG5)
 </pre></code>
 ソースを見ると日本版とEUR Update1がもっとも良く似ている？？
 （M250Kは日本版には無いシンボルが幾つか存在している...）
@@ -86,7 +89,7 @@ I9100 SGH-N033 EUR (ベース) ---> SHW-M250x ----------------------> SHW-M250x 
 
 
 <div><br>
-<hr checked="true"><span style="font-weight: bold;">[Eur Update1とSC-02Cとの違い]</span><br>
+<hr checked="true"><span style="font-weight: bold;">[Eur Update1とSC-02C(KF2)との違い]</span><br>
 <BR>
 EUR Update1とSC-02C製品版カーネルは似ているのだが、やはりそれでも製品版には無いシンボルが幾つか存在している。ので、厳密には完全一致とは言えない。<br>
 <BR>
@@ -119,6 +122,29 @@ calculate_average_adc drivers/power/sec_battery.c <BR>
 (実はUpdate1などのソースには存在しているものの、Update1ではstatic宣言なので表に出てこない)<BR>
 <BR>
 </div>
+
+<div><br>
+<hr checked="true"><span style="font-weight: bold;">[SC-02C(KF2)とSC-02C(KG5)との違い]</span><br>
+2011年8月にアップデートがあり、カーネルはKG5となった。<BR>
+<BR>
+KF2とKG5の相違点は次の通り。<BR>
+シンボルだけを見るとLD9040(LCDがらみ)の変数が若干なくなっている<BR>
+<BR>
+以下のシンボルがなくなっている。<BR>
+<BR>
+ld9040_sm2_a1_19_40<BR>
+ld9040_sm2_a1_22_40<BR>
+ld9040_sm2_a2_19_40<BR>
+ld9040_sm2_a2_22_40<BR>
+<BR>
+あとSEQ_ACL_ONまわりのサイズが増えているかもしれない。<BR>
+<BR>
+逆アセンブルレベルでは確認していないが、他の変更点は無い模様。<BR>
+アドレスと関数の想定サイズだけを見るとLCD関連以外はほぼ一致している。<BR>
+<BR>
+<BR>
+</div>
+
 
 <div><br>
 <hr checked="true"><span style="font-weight: bold;">[実際に焼いてみると]</span><br>
