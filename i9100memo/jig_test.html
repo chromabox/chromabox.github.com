@@ -1,0 +1,443 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="start index" href="./">
+    <title>GT-I9100用のJIGについて、他抵抗値の実験と調査</title>
+  </head>
+  <body>
+    <h2>GT-I9100用のJIGについて、他抵抗値の実験と調査<br>
+    </h2>
+    <p> この内容については無保証です。<br>
+    </p>
+    <div>
+      <hr checked="true"><span style="font-weight: bold;">[概要]</span><br>
+      <br>
+      ダウンロードモードにするJIGの正体は、301KΩをUSB MicroBのID(4)とGND(5)に接続することにより実現できることがわかっていますが、この値を変えればどうなるかという実験です。<br>
+      GT-I9100に関しては(GT-I9000やらその派生も)、MicroUSBのセレクタとしてFSA9280(またはソレに近いチップ)が採用されていることが判明しており、抵抗値で色々動作が変わることがわかっています。(<a href="jig_howto.html">ここ</a>参照) <br>
+      <br>
+      GT-I9000になりますが、元ネタはAdamOutler氏の<a href="http://forum.xda-developers.com/showthread.php?t=1108103">これ</a>関連です。<br>
+      要するにこれをI9100でやるとどうなるかという追試ですね。<br>
+    </div>
+    <div><br>
+      <br>
+      <hr checked="true"><span style="font-weight: bold;">[実験結果]</span><br>
+      <br>
+      色々試せるJIGを新しく作って検証してみた結果、次のようになりました。<br>
+      
+    <table width="100%" border="1">
+      <tbody>
+        <tr>
+          <td>値<br />
+          </td>
+          <td>ID(4)とGND(5)との抵抗値<br />
+          </td>
+          <td>FSA9280での推奨動作<br />
+          </td>
+          <td>実際の動き<br />
+          </td>
+        </tr>
+        <tr>
+          <td>1<br />
+          </td>
+          <td>2kΩ<br />
+          </td>
+          <td>Audio Send End<br />
+          </td>
+          <td>MHLモードに入る。<br>
+          つまり、純正のオプション品であるHDMI出力コネクタでのHDMI出力を行う<br />
+          </td>
+        </tr>
+        <tr>
+          <td>2<br />
+          </td>
+          <td>2.604kΩ<br />
+          </td>
+          <td>Audio Remote S1<br />
+          </td>
+          <td>unsupportedと表示される<br />
+          </td>
+        </tr>
+        <tr>
+          <td>3<br />
+          </td>
+          <td>3.208kΩ<br />
+          </td>
+          <td>Audio Remote S2<br />
+          </td>
+          <td>unsupportedと表示される<br />
+          </td>
+        </tr>
+        <tr>
+          <td>4<br />
+          </td>
+          <td>4.014kΩ<br />
+          </td>
+          <td>Audio Remote S3<br />
+          </td>
+          <td>unsupportedと表示される<br />
+          </td>
+        </tr>
+        <tr>
+          <td>5<br />
+          </td>
+          <td>4.82kΩ<br />
+          </td>
+          <td>Audio Remote S4<br />
+          </td>
+          <td>unsupportedと表示される<br />
+          </td>
+        </tr>
+        <tr>
+          <td>6<br />
+          </td>
+          <td>6.03kΩ<br />
+          </td>
+          <td>Audio Remote S5<br />
+          </td>
+          <td>unsupportedと表示される<br />
+          </td>
+        </tr>
+        <tr>
+          <td>7<br />
+          </td>
+          <td>8.03kΩ<br />
+          </td>
+          <td>Audio Remote S6<br />
+          </td>
+          <td>unsupportedと表示される<br />
+          </td>
+        </tr>
+        <tr>
+          <td>8<br />
+          </td>
+          <td>10.03kΩ<br />
+          </td>
+          <td>Audio Remote S7<br />
+          </td>
+          <td>unsupportedと表示される<br />
+          </td>
+        </tr>
+        <tr>
+          <td>9<br />
+          </td>
+          <td>12.03kΩ<br />
+          </td>
+          <td>Audio Remote S8<br />
+          </td>
+          <td>unsupportedと表示される<br />
+          </td>
+        </tr>
+        <tr>
+          <td>10<br />
+          </td>
+          <td>14.46kΩ<br />
+          </td>
+          <td>Audio Remote S9<br />
+          </td>
+          <td>unsupportedと表示される。※１<br />
+          </td>
+        </tr>
+        <tr>
+          <td>11<br />
+          </td>
+          <td>17.26.4kΩ<br />
+          </td>
+          <td>Audio Remote S10<br />
+          </td>
+          <td>unsupportedと表示される。※１<br />
+          </td>
+        </tr>
+        <tr>
+          <td>12<br />
+          </td>
+          <td>20.5kΩ<br />
+          </td>
+          <td>Audio Remote S11<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>13<br />
+          </td>
+          <td>24.07kΩ<br />
+          </td>
+          <td>Audio Remote S12<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>14<br />
+          </td>
+          <td>28.7kΩ<br />
+          </td>
+          <td>Reserve Accessory #1<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>15<br />
+          </td>
+          <td>34kΩ<br />
+          </td>
+          <td>Reserve Accessory #2<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>16<br />
+          </td>
+          <td>40.2kΩ<br />
+          </td>
+          <td>Reserve Accessory #3<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>17<br />
+          </td>
+          <td>49.9kΩ<br />
+          </td>
+          <td>Reserve Accessory #4<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>18<br />
+          </td>
+          <td>64.9kΩ<br />
+          </td>
+          <td>Reserve Accessory #5<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>19<br />
+          </td>
+          <td>80.7kΩ<br />
+          </td>
+          <td>DO NOT USE<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>20<br />
+          </td>
+          <td>102kΩ<br />
+          </td>
+          <td>DO NOT USE<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>21<br />
+          </td>
+          <td>121kΩ<br />
+          </td>
+          <td>TTY Converter<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>22<br />
+          </td>
+          <td>150kΩ<br />
+          </td>
+          <td>UART<br />
+          </td>
+          <td>unsupportedと表示される。<br>
+          FSAのデフォルトではUARTなのだがUSBには何も出てこない<br />
+          </td>
+        </tr>
+        <tr>
+          <td>23<br />
+          </td>
+          <td>200kΩ<br />
+          </td>
+          <td>Car Dock<br />
+          </td>
+          <td>なにも表示されない。※2<br />
+          </td>
+        </tr>
+        <tr>
+          <td>24<br />
+          </td>
+          <td>255kΩ<br />
+          </td>
+          <td>Factory Mode Boot OFF-USB<br />
+          </td>
+          <td>JIG USB BOOTOFFと表示される。<br>
+          電源断のときにこれをしても何もならない。<br>
+          電源ON時にこれをすると単に本体が数秒震えるだけ<br />
+          </td>
+        </tr>
+        <tr>
+          <td>25<br />
+          </td>
+          <td>301kΩ<br />
+          </td>
+          <td>Factory Mode Boot ON-USB<br />
+          </td>
+          <td>例のJIGでダウンロードモードに入る値。<br>
+          JIG USB BOOTONと表示される。<br>
+          電源断のときにこれをすると自動で電源ON＆ダウンロードモードに強制移行。<br>
+          電源ON時にこれをすると単に本体が数秒震えるだけ<br />
+          </td>
+        </tr>
+        <tr>
+          <td>26<br />
+          </td>
+          <td>365kΩ<br />
+          </td>
+          <td>DO NOT USE<br />
+          </td>
+          <td>DeskDockと表示される。<br>
+          画面上はDockモードになり、画面が切り替わる。<br>
+          純正のDOCKを買って挿した場合と同じものと思われる。<br>
+          USBがAUDIO_MODEとなるので、USBの２つの信号端子はそれぞれ音チャネルのLRとなる。
+<br />
+          </td>
+        </tr>
+        <tr>
+          <td>27<br />
+          </td>
+          <td>442kΩ<br />
+          </td>
+          <td>Car Dock<br />
+          </td>
+          <td>なにも表示はされない。<br>
+          </td>
+        </tr>
+        <tr>
+          <td>28<br />
+          </td>
+          <td>523kΩ<br />
+          </td>
+          <td>Factory Mode Boot OFF-UART<br />
+          </td>
+          <td>JIG UART/BOOTOFFと表示される。<br>
+          電源断のときにこれをすると電源が自動でONになり、UART(USB端子)にブートローダのログが流れるようになる。<br>
+          カーネルの起動と同時にUART出力しないようで、電源ON時は残念ながら何か流れることもない。別な設定が必要なのかもしれない。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>29<br />
+          </td>
+          <td>619KΩ<br />
+          </td>
+          <td>Factory Mode Boot ON-UART<br />
+          </td>
+          <td>CARDOCKと表示される。<br>
+          通知バーにはI9100では未実装のはずのドライブモードを示すハンドルアイコンが表示されるようになる。<br>
+          が、ドライブモード自体がフレームワークに実装が無いのみたいで、動作は不十分。ただアイコンが表示されるだけで別段画面は切り替わることは無い。<BR>
+           なお、これもUSBがAUDIO_MODEとなるので、USBの２つの信号端子はそれぞれ音チャネルのLRとなる。<br />
+           <br>
+           また、何故か電源断のときにこれをすると電源が自動でONになり、UART(USB端子)にブートローダのログが流れ、2次ブートローダの操作が出来るようになる。(ブートローダはお約束に従ってる？)<br>
+
+          </td>
+        </tr>
+        <tr>
+          <td>30<br />
+          </td>
+          <td>1MΩ<br />
+          </td>
+          <td>Audio Type 1 with Remote<br />
+          </td>
+          <td>unsupportedと表示される。<br />
+          </td>
+        </tr>
+        <tr>
+          <td>--(0?)<br />
+          </td>
+          <td>GND<br />
+          </td>
+          <td>DO NOT USE<br />
+          </td>
+          <td>OTG動作となる。（OTGとなりUSBがホストモードになる。Vbusは出す側になるので注意）<br />
+          </td>
+        </tr>
+        <tr>
+          <td>--(0?)<br />
+          </td>
+          <td>OPEN(∞Ω)<br />
+          </td>
+          <td>なし<br />
+          </td>
+          <td>通常のUSB動作となる。<br />
+          </td>
+        </tr>
+        
+       </tbody>
+      </table>
+        ※１：ソースでは、それぞれADC_DOCK_VOL_DN、ADC_DOCK_VOL_UPに割り当たってるので、ドックに刺さったときのボリュームボタンに対応しているものと思われる。（モードに入れた後ですると良いのかも）
+        ※２：ソースでは、ADC_CEA936ATYPE2_CHGに割り当たってる。
+        
+
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[実は]</span><br>
+      <br>
+      動作自体の定義は<br>
+      drivers/misc/max8997-muic.c<br>
+      に色々定義されております。<br>
+      <br>
+      また、dmesgを見るとUSBを挿したり抵抗値を変えると何が繋がったとかログを出す感じです。<br>
+      <br>
+      今回の実験で、FSA9260が動作決定しているわけではなくて、FSA9260は抵抗値からのコード値をMAX8997に渡して、MAX8997がどうするか判断しているという構図が見て取れます。よって、max8997-muic.cを使っているというのが証明できたという感じになりますね。
+    </div>
+
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[こんな回路で検証しました]</span><br>
+      <br>
+      繋げた図はこんな感じです。<br>
+      <img src="jig_test01.jpg"><br>
+      これはDockモードに入ってるときのやつですね。<br>
+      <br>
+      図面は<a href="jig_test02.jpg">こんな感じ</a>です。(でかいのでリンクだけ)<br>
+      <br>
+      さほど難しい回路ではないですが、部品点数がやたら多いのでそれなりに時間を要しました。<br>
+    </div>
+
+        
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[余談]</span><br>
+      <br>
+      推奨値では使ってなくて変わった使い方してるなぁというのが正直な感想です。<BR>
+      ただ、FSA9280から返してくる値は完全一致してたので、このチップを使ってるんだなぁというのが判ります。<BR>
+      <BR>
+      このあたりは同じような部品を使ってるI9000やその派生品もMHLがあるなしとか若干の違いはありそうですが、多分似たような結果になるんじゃないかなと推測もできます。<BR>
+      <BR>
+      あと、カーネルに手を加えれば、未実装になっている抵抗値を生かして自由度の高い独自なアクセサリが作れるかもしれませんね。<BR>
+      （最近ADKとか出てきてるからあまり意味無い感じもしますが。。）
+      <br>
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[余談2]</span><br>
+      <br>
+      MHLモードは、おそらくSil9244(HDMI規格をMHLに直したり戻したりするトランスミッター)同士で通信しているんだろうと推測できます。<BR>
+      純正のオプション品にはHDMIへの変換とあって、ACアダプダが必要ともあるので、あけてみるとSil9244（またはSil9292）が鎮座しているんじゃないかなと。<BR>
+      このあたり、ThunderBoltと良く似てますね。（つまり、送信側と受信側に同じようなチップが必要）<BR>
+      これは接続したケーブルの先にもSil9244（か、それに順ずるもの）が必要ということで、別にRGB信号が流れてるわけでもなさそうであまり面白みがなさそうだなぁという感想です。<BR>
+      <br>
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[余談3]</span><br>
+      <br>
+      Dockモード時の音はどうやらサムスンのアプリから再生しないと出ないとかなんとか。<BR>
+      純正のDockを持ってないのでなんともいえませんが。。<BR>
+      内部的にはオーディオ信号の流れる向きを変えてるような感じです。<BR>
+    </div>
+    
+  </body>
+</html>

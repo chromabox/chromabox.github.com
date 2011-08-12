@@ -1,0 +1,292 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+  <head>
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="start index" href="./">
+    <title>GT-I9100用のUART出力JIGについて</title>
+  </head>
+  <body>
+    <h2>GT-I9100用のUART出力JIGについて<br>
+    </h2>
+    <p> この内容については無保証です。<br>
+    </p>
+    <div>
+      <hr checked="true"><span style="font-weight: bold;">[概要]</span><br>
+      <br>
+      UARTといっても普通の人にはピンと来ないかもしれませんが、早い話がCOMポート(RS-232Cのアレ)みたいなやつです。<BR>
+      要するにTx信号とRx信号を使うシリアル通信です。<BR>
+      <BR>
+      ARMなどのCPUには元々UART端子が備わっており、これにコンソール出力をしています。<BR>
+      (s5pv310は他にも3つのUARTがあるみたいで、ベースバンドを操作したりしてるようです）<BR>
+      <BR>
+      で、ここから出る出力はデバッグ時に良く使われ、ブートローダの起動ログなんかも出てくるんじゃないかなという実験です。<BR>
+      実験です、、というより、I9000では検証済みネタで、またしてもAdamOuter氏とUberPinguin氏の<a href="http://www.xda-developers.com/android/self-made-uart-jig-and-debugging-connector-for-sgs-i9000/">コレ</a>の追試になります。<br>
+    </div>
+
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[回路図]</span><br>
+      <BR>
+      イキナリですが回路図はこんな感じです。<br>
+      <img src="jig_uart001x.jpg"><br>
+      <br>
+      まずUSB-UARTモードにするためには、JIGで使っている抵抗値を301kから変更する必要があります。<br>
+      I9100は、一度USB-UARTモードに入ると、USB－とUSB＋に対してそれぞれUARTのTxとRxが割り当てるようになっています。<br>
+      <br>
+      <br>
+      チップからUARTを引き出してPCと接続する場合、信号レベルが合わないですので、UARTからRS232C信号レベルへの変換が必要になります<br>
+      <br>
+      RS232CレベルにするにはレベルコンバータIC(MAX232系)を使うのが定石ですが、これを動かすには何処からか5V電源が必要になりますし、I9100のUSBからとってくることもできない(Vbusですが給電側です)、電池orACアダプダなりで外部電源が必要になってきます。<BR>
+      (DSUBからVccを取る手段無いかといえばそうでも無いんですが裏技的扱いなので、、)<BR>
+      <BR>
+      あと、最近はPCにシリアルポート(COM)が無いものが主流になってるので、今回はUARTからUSBに変換する機能を持ったIC(FT232R系)を使って楽して直接変換しています。FT232Rの電源はPCのUSBのVbusから取れますしね。<br>
+      <br>
+      余談ですがFT232Rというチップは、数多あるUSB-Serial変換コネクタに良く使われているチップです。<br>
+      (つまり、これを挿すとCOMポートが一つ増えるわけです。)<br>
+      <br>
+      なお、RS232Cを使う場合はこんな感じになりますね。(注：未検証)<br>
+      <br>
+      <img src="rsuart.jpg"><br>
+      <br>
+      何処からか5vが必要になってきますが、部品点数が少なくなるので作りやすいのはこっちかもしれません。<br>
+    </div>
+
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[使い方]</span><br>
+      <BR>
+      まずPCにターミナルソフトを入れてください。(TeraTermなど)<BR>
+      ボーレートは115200で、データは8Bit、パリティなし、ストップ制御1Bit、フロー制御なしの設定です。<BR>
+      <BR>
+      で、一度端末の電源を落としてからこのJIGを挿します。<br>
+      JIGを挿すと勝手に端末が起動します。
+    </div>
+      
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[結果]</span><br>
+      <BR>
+      PCに繋げて端末電源を入れると、次のようにブートローダからのログが流れてきました。<BR>
+      若干長いですが、こんな感じです。<BR>
+      <code><pre>
+Welcome to Samsung Primitive Bootloader.
+build time: Jun  2 2011 01:03:50
+current time: ff/13/0 3f:24:9
+
+[set_mmc_ocr] Sector Mode
+[hsmmc_init] MMC card is detected
+Product Name : VYL00M
+<display_card_info:1009> ext_csd
+<display_card_info:1011>card_size: 15028
+Total Card Size: 15029 MByte
+
+mmc_init: card initialization completed!
+pbl found bootable sbl in #49152.
+jump to sbl 0x4d400000.
+
+Secondary Bootloader v3.1 version.
+Copyright (C) 2011 System S/W Group. Samsung Electronics Co., Ltd.
+Board: C1 REV 02 / Jun  2 2011 01:04:01
+current time: ff/13/0 3f:24:9
+
+booting code=0x0
+[set_mmc_ocr] Sector Mode
+[hsmmc_init] MMC card is detected
+Product Name : VYL00M
+CID:XXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+<display_card_info:1040> ext_csd
+<display_card_info:1042>card_size: 15028
+Total Card Size: 15029 MByte
+
+Total Sector Count: 30777344
+
+MoviNand Initialization Complete!
+===== PARTITION INFORMATION =====
+ID         : GANG (0x0)
+DEVICE     : MMC
+FIRST UNIT : 0
+NO. UNITS  : 0
+=================================
+ID         : BOOT (0x1)
+DEVICE     : MMC
+FIRST UNIT : 0
+NO. UNITS  : 0
+=================================
+ID         : EFS (0x4)
+DEVICE     : MMC
+FIRST UNIT : 8192
+NO. UNITS  : 40960
+=================================
+ID         : SBL1 (0x2)
+DEVICE     : MMC
+FIRST UNIT : 49152
+NO. UNITS  : 2560
+=================================
+ID         : SBL2 (0x3)
+DEVICE     : MMC
+FIRST UNIT : 53248
+NO. UNITS  : 2560
+=================================
+ID         : PARAM (0x5)
+DEVICE     : MMC
+FIRST UNIT : 57344
+NO. UNITS  : 16384
+=================================
+ID         : KERNEL (0x6)
+DEVICE     : MMC
+FIRST UNIT : 73728
+NO. UNITS  : 16384
+=================================
+ID         : RECOVERY (0x7)
+DEVICE     : MMC
+FIRST UNIT : 90112
+NO. UNITS  : 16384
+=================================
+ID         : CACHE (0x8)
+DEVICE     : MMC
+FIRST UNIT : 106496
+NO. UNITS  : 204800
+=================================
+ID         : MODEM (0x9)
+DEVICE     : MMC
+FIRST UNIT : 311296
+NO. UNITS  : 32768
+=================================
+ID         : FACTORYFS (0xa)
+DEVICE     : MMC
+FIRST UNIT : 344064
+NO. UNITS  : 1253376
+=================================
+ID         : DATAFS (0xb)
+DEVICE     : MMC
+FIRST UNIT : 1597440
+NO. UNITS  : 4194304
+=================================
+ID         : UMS (0xc)
+DEVICE     : MMC
+FIRST UNIT : 5791744
+NO. UNITS  : 24133632
+=================================
+ID         : HIDDEN (0xd)
+DEVICE     : MMC
+FIRST UNIT : 29925376
+NO. UNITS  : 843776
+=================================
+loke_init: j4fs_open..success
+<start_checksum:1022>CHECKSUM_HEADER_SECTOR :42
+<start_checksum:1024>offset:42, size:1024
+Not Need Movinand Checksum
+load_lfs_parameters valid magic code and version.
+switch_sel_str='1'
+load_debug_level: read debug level successfully(0x574f4c44)...LOW
+init_ddi_data: usable ddi data.
+init_fuel_gauge : not por status
+fuel_gauge_get_version: [1]=0, [0]=92
+init_fuel_gauge: vcell = 3953 mV, vfocv = 4015 mV, soc = 82
+init_fuel_gauge : check s/w reset (20000000) : use wide tolerance
+microusb_get_attached_device: STATUS1:0x3d, 2:0x0
+7781 = (393300 - 337808)*14022/100000
+[2] 398565 = (7781 * 100000) / 16565 + 351593
+init_microusb_ic: MUIC: CONTROL1:0x1b
+init_microusb_ic: MUIC: CONTROL1:0x1b
+init_microusb_ic: MUIC: CONTROL2:0x3a
+init_microusb_ic: MUIC: CONTROL2:0x3a
+reading nps status file is successfully!.
+nps status=0x504d4f43
+PMIC_IRQSRC  = 0x2
+PMIC_IRQ1    = 0x0
+PMIC_IRQ2    = 0x18
+PMIC_IRQ3    = 0x0
+PMIC_IRQ4    = 0x13
+PMIC_STATUS1 = 0x0
+PMIC_STATUS2 = 0x17
+PMIC_STATUS3 = 0x3
+PMIC_STATUS4 = 0x0
+bootloader base address=0x4d400000
+LPDDR0 1st. cached=0x40000000, size=0xe400000
+LPDDR0 non-cached=0x4e400000, size=0xa00000
+LPDDR0 2nd. cached=0x4ee00000, size=0x1200000
+RST_STAT = 0x20000000
+get_hwrev() = 12
+board_process_platform: MAGIC 0 at 40000000!
+microusb_get_attached_device: STATUS1:0x3d, 2:0x0
+microusb_get_attached_device: STATUS1:0x3d, 2:0x0
+microusb_get_attached_device: STATUS1:0x3d, 2:0x0
+microusb_get_attached_device: STATUS1:0x3d, 2:0x0
+hw_pm_status: jig_status = 1, chg_status = 0
+DISPLAY_PATH_SEL[MDNIE 0x1]is on
+div:2, FB_SOURCE_CLOCK:667000000, FB_PIXEL_CLOCK:25067520
+MDNIE setting Init start!!
+vsync interrupt is off
+video interrupt is off
+[fb0] turn on
+MDNIE setting Init end!!
+
+Autoboot (0 seconds) in progress, press any key to stop
+boot_kernel: debug level low!
+checkbit: find RECOVERY
+checkbit (0)
+......kernel is non signed binary.
+ATAG_CORE: 5 54410001 0 0 0
+MEMCONFIG: 20e01323 20e01323
+ATAG_MEM: 4 54410002 10000000 40000000
+ATAG_MEM: 4 54410002 10000000 50000000
+ATAG_MEM: 4 54410002 10000000 60000000
+ATAG_MEM: 4 54410002 10000000 70000000
+ATAG_SERIAL: 4 54410006 193fba5e 304d1907
+ATAG_REVISION: 3 54410007 c
+ATAG_CMDLINE: 37 54410009 'loglevel=4 console=ram sec_debug.enable=0 sec_debug.enable_user=0 c1_watchdog.sec_pet=5 sec_log=0x100000@0x4d900000 s3cfb.bootloaderfb=0x5ec00000 ld9040.get_lcdtype=0x2 consoleblank=0 lpj=3981312 vmalloc=144m'
+ATAG_NONE: 0 0
+
+Starting kernel at 0x40008000...
+
+      </pre><code>
+      <br>
+      ブートローダにもPrimaryとSecondaryがあり、二段構えになってるのが見て取れますね。<br>
+      <br>
+      起動の流れはこんな感じでしょう。<br>
+      はじめのブートローダが起動→MMCの初期化→0x4d400000へジャンプ→<br>
+      二番目のブートローダが起動→最低限必要な周辺を初期化→カーネルをRAMに展開→0x40008000へジャンプ<br>
+      <br>
+      <br>
+      UARTはStarting kernel at の表示以降は一切流れなくなってしまいます。多分なんらかのオプションなり何かが必要です。<br>
+      <br>
+      また、今回はカーネルは自分でビルドしているものに差し替えてるため、<br>
+      ......kernel is non signed binary.<BR>
+      と表示されていることから、ブートローダはカーネルの改変をしっかり認識しているということになります<br>
+      <br>
+      なお、この表示<br>
+      Autoboot (0 seconds) in progress, press any key to stop<br>
+      かきてすかさず何かキーを押すとブートローダはプロンプトになりコマンド入力待ちとなります。<br>
+      この間ずっと端末画面上は一番初めのdocomo画面になっているので、この画面は一次か二次かどちらかのブートローダが出していると思われます。<BR>
+    </div>
+      
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[何が出来るか]</span><br>
+      <br>
+      コマンドのヘルプを見てみましたが、NANDが部分的に消せたり出来る程度で、ざっと見た感じではたいしたことは出来そうにないです。<BR>
+      というよりブートローダを損傷すると二度と復旧できない可能性が高くなるのであまり触れてません。(そのうち色々調べようと思っていますが)<BR>
+      今のところは、なんか起動しない場合において、ブートローダの何処でこけてるかもしれないなーとか、NANDのパーティションが判るくらいですね<BR>
+      <BR>
+      あと、NANDの内容を吸い出したりすることはここからでは出来なさそうなのでちょっと残念です。<BR>
+      <BR>
+    </div>
+
+
+        
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[余談]</span><br>
+      <br>
+      I9000では、SWITCH_SELの値を変更してやると、カーネルが起動した後でもカーネル起動ログが流れてきますが、I9100では流石に変えてきたのか変更しても出なくなりました。<BR>
+      ただ、カーネルで認識しているUARTモードの抵抗値とブートで認識しているUARTモードの値が微妙に異なるので、そのあたりもう少し検証が必要な感じはしてます。      
+      <br>
+    </div>
+    <div><br>
+      <hr checked="true"><span style="font-weight: bold;">[余談2]</span><br>
+      <br>
+      ブートローダのコマンド体系は、U-bootに似た体型になってるので、U-boot使ったことがある人はわかり易いんじゃないかと。<br>
+      U-Bootとは、組み込みLinux系で良く使われるフリーのブートローダです。
+      <br>
+    </div>
+    
+  </body>
+</html>
