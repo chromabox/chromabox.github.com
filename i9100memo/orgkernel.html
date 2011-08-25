@@ -34,6 +34,7 @@
 <code><pre>
 I9100 SGH-N033 EUR ：俗に言う国際版
 I9100 EUR Update1  ：7月中ごろに出た国際版のアップデート版(カーネルのみ)
+I9100 EUR Update2  ：8月中ごろに出た国際版のアップデート版(2.3.4対応)
 I9100 HK CHR       ；香港版。SIMフリーらしい
 I9100 CHR CHR      ；中国版。
 SHW-M250K          ：韓国版のI9100(KT向け)
@@ -76,15 +77,16 @@ I9100 EUR Update1は I9100 HK CHRと大変良く似ている。Sleep.sのTLBの�
 <BR>
 I9100 CHR CHRは後発だが、Sleep.sのTLBの修正がなかったりするので多分そんなには新しくない。<BR>
 <BR>
+I9100 EUR Update2はUpdate1から幾つかの修正・変更がなされている。また、北米版用と思われる機種のソースが入っている。<BR>
+<BR>
 開発の時系列としてはこんな感じかもしれない<BR>
 <code><pre>
 I9100 SGH-N033 EUR (ベース) ---> SHW-M250x ----------------------> SHW-M250x Update1
-                             +-----------> I9100 HK CHR ---------> EUR Update1
+                             +-----------> I9100 HK CHR ---------> EUR Update1--> EUR Update2
                              +------------------> I9100 CHR CHR 
                              +--------------->SC-02C(KF2)-->SC-02C(KG5)
 </pre></code>
-ソースを見ると日本版とEUR Update1がもっとも良く似ている？？
-（M250Kは日本版には無いシンボルが幾つか存在している...）
+ソースを見ると日本版とEUR Update2がもっとも良く似ている？？
 </div>
 
 
@@ -142,6 +144,33 @@ ld9040_sm2_a2_22_40<BR>
 逆アセンブルレベルでは確認していないが、他の変更点は無い模様。<BR>
 アドレスと関数の想定サイズだけを見るとLCD関連以外はほぼ一致している。<BR>
 <BR>
+<BR>
+</div>
+
+
+<div><br>
+<hr checked="true"><span style="font-weight: bold;">[Eur Update1とEur Update2との違い]</span><br>
+<BR>
+2011年8月中ごろにEur Update2が出た<BR>
+Update1とは結構変わっていて、次の点が異なる<BR>
+<BR>
+・watchdog、サーマルがようやく適用。韓国版準拠に<BR>
+・Update1では消えていて、日本版ではあったシンボルが幾つか公開(実装？)されている<BR>
+ l2x0_nolock_clean_all<BR>
+ dmb_init_hw_setting<BR>
+ checkfilename_do_truncate<BR>
+・FIPS(暗号モジュール規定)を優先して使うようなコンフィグが入っている。<BR>
+(Integrity Checkとか書いてあるので、今後何かに署名するため？もしくは米国政府関係に使ってもらうため？)<BR>
+・北米関連の対応（WIMAXの対応、CDMAケーブル？の対応、S5K5BBGXの新規対応）<BR>
+・パネル(色)辺りの細やかな変更<BR>
+・周波数がらみの若干の変更<BR>
+・バグの修正と思われるもの幾つか。。(CPU suspend時に6ms入れるとか。。)<BR>
+・TV時のなんたらモードを使うときに、ファイルを参照するようになった（/system/etc/mdnie_tune_isdbt_warm_mode とか）<BR>
+<BR>
+なんかfs/namei.cのdo_unlinkatに/data/system/appwidgets.xmlを比較している箇所が。。。(はっきりいって無駄)<BR>
+なんかfs/open.cにも/data/system/appwidgets.xmlを比較している箇所が。。。(はっきりいって無駄)<BR>
+<BR>
+あまり関係ないけど、script/ あたりにカーネル生成時に自動的に生成されるファイルがすでに入っている。。<BR>
 <BR>
 </div>
 
