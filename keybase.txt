@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/chromarock
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://chromabox.github.io
+  * I am chromarock (https://keybase.io/chromarock) on keybase.
+  * I have a public key ASCIDYl84q3lXA-iJWRLXRLqDJuIziu8QQ30xAAemwzy5Qo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120880d897ce2ade55c0fa225644b5d12ea0c9b88ce2bbc410df4c4001e9b0cf2e50a",
+      "host": "keybase.io",
+      "kid": "0120880d897ce2ade55c0fa225644b5d12ea0c9b88ce2bbc410df4c4001e9b0cf2e50a",
+      "uid": "791344913632ca0c8f3badbe8b67b119",
+      "username": "chromarock"
+    },
+    "merkle_root": {
+      "ctime": 1676025271,
+      "hash": "18c2308dc098a72846379d9052f796ebf02a544fa317227776b8e5d950fc80f0d20feddaea4b1838e5a791c4d4159880e3fdce20eb44037c8890c538d31d4287",
+      "hash_meta": "83a77e1e7c3d61035fb1d8de2f0f1451e977140289849f976d44791afff94e76",
+      "seqno": 24025658
+    },
+    "service": {
+      "entropy": "Ny2O3XEFC9E8XGasMuw/P2LT",
+      "hostname": "chromabox.github.io",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "6.0.2"
+  },
+  "ctime": 1676025318,
+  "expire_in": 504576000,
+  "prev": "17532edee5774b3f43022786dbbc221f9b28df516a5ed9eabaca2dd0697a42b5",
+  "seqno": 7,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgiA2JfOKt5VwPoiVkS10S6gybiM4rvEEN9MQAHpsM8uUKp3BheWxvYWTESpcCB8QgF1Mu3uV3Sz9DAieG27wiH5so31FqXtnqusot0Gl6QrXEIGs2yOeA4J13+10rijLY52DZldeD+8sxYyks4xfsYtshAgHCo3NpZ8RAH/3VH9OJ7dk5LWuaw3GrmQBM2NH1Z9Z+kl1SPhTaeIo8dZHYFdizoYWBN+X2rpb+kmv070Xmq77I/vewHQ60CKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIGOg4w3CzIr/TgRP1Eb/e4FJ09H4WjBDuEtRFiuWaf0Mo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/chromarock
+
+==================================================================
